@@ -1,0 +1,204 @@
+{
+  "intents": [
+    {
+      "name": "AMAZON.CancelIntent",
+      "samples": []
+    },
+    {
+      "name": "AMAZON.HelpIntent",
+      "samples": []
+    },
+    {
+      "name": "AMAZON.NoIntent",
+      "samples": []
+    },
+    {
+      "name": "AMAZON.StopIntent",
+      "samples": []
+    },
+    {
+      "name": "AMAZON.YesIntent",
+      "samples": []
+    },
+    {
+      "name": "TableIntent",
+      "samples": [
+        "what is the table",
+        "list the table",
+        "show the table",
+        "what are the standings"
+      ],
+      "slots": []
+    },
+    {
+      "name": "TeamIntent",
+      "samples": [
+        "how did {plteam} do",
+        "tell me about {plteam}",
+        "describe {plteam}",
+        "show {plteam}"
+      ],
+      "slots": [
+        {
+          "name": "plteam",
+          "type": "plTeam",
+          "samples": []
+        }
+      ]
+    }
+  ],
+  "types": [
+    {
+      "name": "plTeam",
+      "values": [
+        {
+          "id": "ManchesterUnited",
+          "name": {
+            "value": "Manchester United",
+            "synonyms": [
+              "Man United"
+            ]
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Manchester City",
+            "synonyms": [
+              "Man City"
+            ]
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Huddersfield Town",
+            "synonyms": [
+              "Huddersfield",
+              "terriers"
+            ]
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Burnley",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Everton",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "West Bromich Albion",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Liverpool",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Watford",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Southampton",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Swansea City",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Brighton",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Newcastle",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Tottenham",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "West Ham",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Leicester City",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Chelsea",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Bournemouth",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Stoke City",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Crystal Palace",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "Arsenal",
+            "synonyms": []
+          }
+        }
+      ]
+    }
+  ]
+}

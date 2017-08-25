@@ -1,7 +1,4 @@
 
-// 1. Text strings =====================================================================================================
-//    Modify these strings and messages to change the behavior of your Lambda function
-
 var languageStrings = {
     'en': {
         'translation': {

@@ -5,7 +5,7 @@
 var languageStrings = {
     'en': {
         'translation': {
-            'WELCOME' : "Welcome to Premier League V three, ",
+            'WELCOME' : "Welcome to Premier League 2.2, ",
             'HELP'    : "Say get table, a team name or nickname, red cards, yellow cards, clean sheets or golden boot ",
             'ABOUT'   : "Premier League is the best football league in the world.",
             'STOP'    : "Okay, see you next time!"
@@ -292,8 +292,8 @@ function loadMainTable(emmiter, say, filename, reprompt) {
                 datastring = '{ "name":"'    + oneTeam[0] + 
                      '", "games played":"'   + oneTeam[1] + 
                      '", "wins":"'           + oneTeam[2] + 
-                     '", "losses":"'         + oneTeam[3] + 
-                     '", "draws":"'          + oneTeam[4] + 
+                     '", "draws":"'          + oneTeam[3] + 
+                     '", "losses":"'         + oneTeam[4] + 
                      '", "goalsfor":"'       + oneTeam[5] + 
                      '", "goalsagainst":"'   + oneTeam[6] + 
                      '", "goaldifference":"' + oneTeam[7] + 

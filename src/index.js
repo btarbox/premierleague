@@ -5,7 +5,7 @@
 var languageStrings = {
     'en': {
         'translation': {
-            'WELCOME' : "Welcome to Premier League V two, ",
+            'WELCOME' : "Welcome to Premier League V three, ",
             'HELP'    : "Say get table, a team name or nickname, red cards, yellow cards, clean sheets or golden boot ",
             'ABOUT'   : "Premier League is the best football league in the world.",
             'STOP'    : "Okay, see you next time!"
@@ -24,60 +24,8 @@ var variedPrompts = {
 };
 
 var data = {
-    "teams" : [
-        { "name":"Manchester United","gamesplayed":"2","wins": "2","losses": "0","draws": "0","goaldifference": "8","points": "6"
-        },
-        { "name":"Huddersfield Town","gamesplayed":"2","wins": "2","losses": "0","draws": "0","goaldifference": "4","points": "6"
-        },
-        { "name":"West Bromwich Albion","gamesplayed":"2","wins": "2","losses": "0","draws": "0","goaldifference": "2","points": "6"
-        },
-        { "name":"Watford","gamesplayed":"2","wins": "1","losses": "0","draws": "1","goaldifference": "2","points": "4"
-        },
-        { "name":"Manchester City","gamesplayed":"2","wins": "1","losses": "0","draws": "1","goaldifference": "2","points": "4"
-        },
-        { "name":"Liverpool","gamesplayed":"2","wins": "1","losses": "0","draws": "1","goaldifference": "1","points": "4"
-        },
-        { "name":"Southhampton","gamesplayed":"2","wins": "1","losses": "0","draws": "1","goaldifference": "1","points": "4"
-        },
-        { "name":"Everton","gamesplayed":"2","wins": "1","losses": "0","draws": "1","goaldifference": "1","points": "4"
-        },
-        { "name":"Leicester City","gamesplayed":"2","wins": "1","losses": "1","draws": "0","goaldifference": "1","points": "3"
-        },
-        { "name":"Tottenham Hotspurs","gamesplayed":"2","wins": "1","losses": "1","draws": "0","goaldifference": "1","points": "3"
-        },
-        { "name":"Arsenal","gamesplayed":"2","wins": "1","losses": "1","draws": "0","goaldifference": "0","points": "3"
-        },
-        { "name":"Chelsea","gamesplayed":"2","wins": "1","losses": "1","draws": "0","goaldifference": "0","points": "3"
-        },
-        { "name":"Burnley","gamesplayed":"2","wins": "1","losses": "1","draws": "0","goaldifference": "0","points": "3"
-        },
-        { "name":"Stoke City","gamesplayed":"2","wins": "1","losses": "1","draws": "0","goaldifference": "0","points": "3"
-        },
-        { "name":"Swansea City","gamesplayed":"2","wins": "0","losses": "1","draws": "1","goaldifference": "minus 4","points": "1"
-        },
-        { "name":"Bournemoth","gamesplayed":"2","wins": "0","losses": "2","draws": "0","goaldifference": "minus 3","points": "0"
-        },
-        { "name":"Newcastle","gamesplayed":"2","wins": "0","losses": "2","draws": "0","goaldifference": "minus 3","points": "0"
-        },
-        { "name":"Brighton","gamesplayed":"2","wins": "0","losses": "2","draws": "0","goaldifference": "minus 4","points": "0"
-        },
-        { "name":"Crystal Palace","gamesplayed":"2","wins": "0","losses": "2","draws": "0","goaldifference": "minus 4","points": "0"
-        },
-        { "name":"West Ham United","gamesplayed":"2","wins": "0","losses": "2","draws": "0","goaldifference": "minus 5","points": "0"
-        },
-
-
-        { "name":"past the end team",
-            "gamesplayed":"0",
-            "wins": "0",
-            "losses": "0",
-            "draws": "0",
-            "goaldifference": "0",
-            "points": "0"
-        }
-
-    ]
-}
+    "teams" : Array(20)
+};
 
 
 // 2. Skill Code =======================================================================================================
@@ -100,10 +48,7 @@ exports.handler = function(event, context, callback) {
 var handlers = {
     'LaunchRequest': function () {
         var say = this.t('WELCOME') + ' ' + this.t('HELP');
-        //console.log('about to call loadFileText');
-        //say += ", the keepers with the most clean sheets are, "
-        //loadStats(this, say, "cleansheets");
-        this.emit(':ask', say, say);
+        loadMainTable(this, say, "maintable", this.t('HELP'));
     },
 
     'AboutIntent': function () {
@@ -148,18 +93,13 @@ var handlers = {
 
         var say = 'The next five teams in the table are ' + buildTableFragment(tableIndex) + '. Would you like to hear more?';
         this.attributes['tableIndex'] = tableIndex + 5;
-        console.log('table index is ' + this.attributes['tableIndex'])
+        console.log('table index is ' + this.attributes['tableIndex']);
         this.emit(':ask', say);
     },
 
     'TeamIntent': function () {
         try {
         console.log('at TeamIntent');
-        //console.log('this.event ' + this.event);
-        //console.log('this.event.request ' + this.event.request);
-        //console.log('this.event.request.intent ' + this.event.request.intent);
-        //console.log('this.event.request.intent.slots ' + JSON.stringify(this.event.request.intent.slots));
-        //console.log('this.event.request.intent.slots ' + JSON.stringify(this.event.request.intent.slots.plteam));
         if(this.event.request.intent.slots.plteam.hasOwnProperty('resolutions')) {
             console.log('we got a resolution');
             //console.log('listening for team name ' + JSON.stringify(this.event.request.intent.slots.plteam.resolutions.resolutionsPerAuthority));
@@ -170,17 +110,17 @@ var handlers = {
         }
         console.log('confirmationStatus:' + this.event.request.intent.slots.plteam.confirmationStatus);
         var numMatches = this.event.request.intent.slots.plteam.resolutions.resolutionsPerAuthority[0].values.length;
-        console.log('there were ' + numMatches + ' matches for name ' + this.event.request.intent.slots.plteam.value)
+        console.log('there were ' + numMatches + ' matches for name ' + this.event.request.intent.slots.plteam.value);
         var cannonicalTeam = this.event.request.intent.slots.plteam.resolutions.resolutionsPerAuthority[0].values[0].value.id;
         console.log('canonical team name ' + cannonicalTeam);
         team = this.event.request.intent.slots.plteam.value;
         var say = 'You asked about ' + cannonicalTeam ;
         
-        teamIndex = findTeamIndex(data, cannonicalTeam)
+        teamIndex = findTeamIndex(data, cannonicalTeam);
         if(teamIndex == -1) {
             console.log('team not found');
             var say = 'Alexa heard ' + team + ', we did not find them, please say the full team name such as Manchester City.';
-            say += ', , , do you want to list the table, ask about a team or stop?'
+            say += ', , , do you want to list the table, ask about a team or stop?';
             this.emit(':ask', say);
         } else {
         // say += ' their index is ' + teamIndex + ' '
@@ -188,11 +128,13 @@ var handlers = {
            + pluralize(data.teams[teamIndex].wins,  'win', 's')    + ', '
            + pluralize(data.teams[teamIndex].draws, 'draw', 's')   + ', '
            + pluralize(data.teams[teamIndex].losses, 'loss', 'es') + ', '
-           + ' and a goal differential of '
+           + pluralize(data.teams[teamIndex].goalsfor, 'goal', 's') + ' scored, '
+           + pluralize(data.teams[teamIndex].goalsagainst, 'goal', 's') + ' allowed, '
+           + ' for a goal differential of '
            + data.teams[teamIndex].goaldifference
-           + 'and ' + pluralize(data.teams[teamIndex].points, 'point', 's')  // ' + data.teams[teamIndex].points + ' points'
+           + ', and ' + pluralize(data.teams[teamIndex].points, 'point', 's')  // ' + data.teams[teamIndex].points + ' points'
            
-        say += "<break time='1s'/>" + randomPrompt();
+        say += "<break time='1s'/>" + "say a team name or other command";
         this.emit(':ask', say);
         }
         }
@@ -320,5 +262,44 @@ function sayPlace(tableIndex) {
        return "third place"
        else 
        return tableIndex + "th place"
+}
+
+function loadMainTable(emmiter, say, filename, reprompt) {
+    const bucket = "bpltables";
+    const fileParams = {
+        Bucket: bucket,
+        Key: filename
+    };
+    console.log('try to open file ' + bucket + ":" + filename);
+    s3.getObject(fileParams, function(err, filedata) {
+        if (err) {
+            console.log("did not find file " + filename + " because:" + err);
+            say += " unable to open file " + filename
+            emmiter.emit(':ask', say, say);
+        } else {
+            console.log("found file " + filename);
+            var body = filedata.Body.toString('ascii');
+            var n = body.split("\n");
+
+            for(var teamIndex = 0; teamIndex < 20; teamIndex++) {
+                oneTeam = n[teamIndex].split(',')
+    
+                datastring = '{ "name":"'    + oneTeam[0] + 
+                     '", "games played":"'   + oneTeam[1] + 
+                     '", "wins":"'           + oneTeam[2] + 
+                     '", "losses":"'         + oneTeam[3] + 
+                     '", "draws":"'          + oneTeam[4] + 
+                     '", "goalsfor":"'       + oneTeam[5] + 
+                     '", "goalsagainst":"'   + oneTeam[6] + 
+                     '", "goaldifference":"' + oneTeam[7] + 
+                     '", "points":"'         + oneTeam[8] + 
+                     '"}';
+                
+                data.teams[teamIndex] = JSON.parse(datastring);
+            }
+            
+        emmiter.emit(':ask', say, say);
+        }
+    });
 }
 

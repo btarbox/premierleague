@@ -27,23 +27,23 @@ var data = {
     "teams" : [
         { "name":"Manchester United","gamesplayed":"2","wins": "2","losses": "0","draws": "0","goaldifference": "8","points": "6"
         },
-        { "name":"Huddersfield Town","gamesplayed":"2","wins": "2","losses": "0","draws": "0","goaldifference": "4","points": "3"
+        { "name":"Huddersfield Town","gamesplayed":"2","wins": "2","losses": "0","draws": "0","goaldifference": "4","points": "6"
         },
         { "name":"West Bromwich Albion","gamesplayed":"2","wins": "2","losses": "0","draws": "0","goaldifference": "2","points": "6"
         },
         { "name":"Watford","gamesplayed":"2","wins": "1","losses": "0","draws": "1","goaldifference": "2","points": "4"
         },
+        { "name":"Manchester City","gamesplayed":"2","wins": "1","losses": "0","draws": "1","goaldifference": "2","points": "4"
+        },
         { "name":"Liverpool","gamesplayed":"2","wins": "1","losses": "0","draws": "1","goaldifference": "1","points": "4"
         },
-        { "name":"Southhampton","gamesplayed":"1","wins": "1","losses": "0","draws": "1","goaldifference": "1","points": "4"
+        { "name":"Southhampton","gamesplayed":"2","wins": "1","losses": "0","draws": "1","goaldifference": "1","points": "4"
         },
-        { "name":"Manchester City","gamesplayed":"1","wins": "1","losses": "0","draws": "0","goaldifference": "2","points": "3"
+        { "name":"Everton","gamesplayed":"2","wins": "1","losses": "0","draws": "1","goaldifference": "1","points": "4"
         },
         { "name":"Leicester City","gamesplayed":"2","wins": "1","losses": "1","draws": "0","goaldifference": "1","points": "3"
         },
         { "name":"Tottenham Hotspurs","gamesplayed":"2","wins": "1","losses": "1","draws": "0","goaldifference": "1","points": "3"
-        },
-        { "name":"Everton","gamesplayed":"1","wins": "1","losses": "0","draws": "0","goaldifference": "1","points": "3"
         },
         { "name":"Arsenal","gamesplayed":"2","wins": "1","losses": "1","draws": "0","goaldifference": "0","points": "3"
         },
@@ -134,7 +134,8 @@ var handlers = {
         console.log("at top of ListTeamNamesIntent");
         var say = 'We recognize the following team names';
         say += 'Manchester United, Huddersfield Town, Manchester City, Tottenham Hotspurs, Arsenel, Burnley, Everton, West Bromwich Albion, ';
-        say += 'Liverpool, Watford, Southhampton, Swansea City, Leicester City, Chelsea, Bournemouth, Stoke City, Brighton, Newcastle, Crystal Palace and West Ham';
+        say += 'Liverpool, Watford, Southhampton, Swansea City, Leicester City, Chelsea, Bournemouth, Stoke City, Brighton, Newcastle, Crystal Palace and West Ham.';
+        say += 'You can also say gunners, potters, cherries, the blues, foxes, hammers, magpies, swans, saints, hornets, the reds, toffees, clarets, terries, citizens';
         say += ',' + randomPrompt()
         this.emit(':ask', say);
     },
@@ -191,7 +192,7 @@ var handlers = {
            + data.teams[teamIndex].goaldifference
            + 'and ' + pluralize(data.teams[teamIndex].points, 'point', 's')  // ' + data.teams[teamIndex].points + ' points'
            
-        say += ',' + randomPrompt();
+        say += "<break time='1s'/>" + randomPrompt();
         this.emit(':ask', say);
         }
         }
@@ -265,7 +266,7 @@ function loadStats(emmiter, say, filename, reprompt) {
                 say += ", " + oneCard[1] + " with " + oneCard[2] +  " has " + oneCard[4];
             }
             
-            say += ". ," + randomPrompt(); //reprompt;
+            say += "<break time='1s'/>" + randomPrompt(); //reprompt;
             emmiter.emit(':ask', say, say);
         }
     });

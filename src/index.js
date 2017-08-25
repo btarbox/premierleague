@@ -124,18 +124,19 @@ var handlers = {
             this.emit(':ask', say);
         } else {
         // say += ' their index is ' + teamIndex + ' '
-        say += ', their form is ' 
-           + pluralize(data.teams[teamIndex].wins,  'win', 's')    + ', '
+        var form = pluralize(data.teams[teamIndex].wins,  'win', 's')    + ', '
            + pluralize(data.teams[teamIndex].draws, 'draw', 's')   + ', '
            + pluralize(data.teams[teamIndex].losses, 'loss', 'es') + ', '
            + pluralize(data.teams[teamIndex].goalsfor, 'goal', 's') + ' scored, '
            + pluralize(data.teams[teamIndex].goalsagainst, 'goal', 's') + ' allowed, '
            + ' for a goal differential of '
            + data.teams[teamIndex].goaldifference
-           + ', and ' + pluralize(data.teams[teamIndex].points, 'point', 's')  // ' + data.teams[teamIndex].points + ' points'
-           
+           + ', and ' + pluralize(data.teams[teamIndex].points, 'point', 's')
+        say += ', their form is ' + form
+
         say += "<break time='1s'/>" + "say a team name or other command";
-        this.emit(':ask', say);
+        var card = cannonicalTeam + "'s form is:" + form;
+        this.emit(':askWithCard', say, "say a team name or other command", cannonicalTeam, card);
         }
         }
         catch(err) {
@@ -186,6 +187,9 @@ function loadStats(emmiter, say, filename, reprompt) {
         Bucket: bucket,
         Key: filename
     };
+    //var cardTitle = say;
+    var cardText = "";
+    
     console.log('try to open file ' + bucket + ":" + filename);
     s3.getObject(fileParams, function(err, data) {
         if (err) {
@@ -195,21 +199,22 @@ function loadStats(emmiter, say, filename, reprompt) {
         } else {
             console.log("found file " + filename);
             var body = data.Body.toString('ascii');
-            //console.log("body is " + body);
             var n = body.split("\n");
 
             oneCard = n[0].split(',')
-            ///console.log( oneCard[1] + " with " + oneCard[2] +  " has " + oneCard[4] + " cards")
             
             for(var index = 0; index < 5; index++) {
-                /// console.log("process line " + index + " which is " + n[index])
                 oneCard = n[index].split(',')
-                // console.log( oneCard[1] + " with " + oneCard[2] +  " has " + oneCard[4] + " cards")
-                say += ", " + oneCard[1] + " with " + oneCard[2] +  " has " + oneCard[4];
+                var newText = oneCard[1] + " with " + oneCard[2] +  " has " + oneCard[4];
+                say += ", " + newText;
+                cardText += newText + '\n';
             }
             
             say += "<break time='1s'/>" + randomPrompt(); //reprompt;
-            emmiter.emit(':ask', say, say);
+            console.log("about to say " + say);
+            console.log("card would be " + filename + ";" + cardText)
+            //emmiter.emit(':ask', say, say);
+            emmiter.emit(':askWithCard', say, randomPrompt(), filename, cardText)
         }
     });
 }

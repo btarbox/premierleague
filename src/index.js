@@ -184,12 +184,12 @@ var handlers = {
         } else {
         // say += ' their index is ' + teamIndex + ' '
         say += ', their form is ' 
-           + data.teams[teamIndex].wins + ' wins, ' 
-           + data.teams[teamIndex].losses + ' losses and,' 
-           + data.teams[teamIndex].draws + ' draws,'
-           + ' a goal differential of '
+           + pluralize(data.teams[teamIndex].wins,  'win', 's')    + ', '
+           + pluralize(data.teams[teamIndex].draws, 'draw', 's')   + ', '
+           + pluralize(data.teams[teamIndex].losses, 'loss', 'es') + ', '
+           + ' and a goal differential of '
            + data.teams[teamIndex].goaldifference
-           + 'and ' + data.teams[teamIndex].points + ' points'
+           + 'and ' + pluralize(data.teams[teamIndex].points, 'point', 's')  // ' + data.teams[teamIndex].points + ' points'
            
         say += ',' + randomPrompt();
         this.emit(':ask', say);
@@ -271,6 +271,14 @@ function loadStats(emmiter, say, filename, reprompt) {
     });
 }
 
+function pluralize(count, noun, ess) {
+    if(parseInt(count) == 1) {
+        return count + " " + noun;
+    } else {
+        return count + " " + noun + ess;
+    }
+}
+
 function randomPrompt() {
     var low = 0;
     var high = 3;
@@ -295,7 +303,7 @@ function buildTableFragment(tableIndex) {
 
     tableFragment = '';
     for (var i = tableIndex; i < (tableIndex + 5); i++) {
-        tableFragment = tableFragment + sayPlace(i+1) + data.teams[i].name + ' with ' + data.teams[i].points +' points, ';
+        tableFragment = tableFragment + sayPlace(i+1) + data.teams[i].name + ' with ' + pluralize(data.teams[i].points, 'point', 's') + ', ';
         console.log('index is now ' + i + 'fragment is ' + tableFragment);
     }
     tableIndex += 5

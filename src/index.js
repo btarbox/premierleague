@@ -5,7 +5,7 @@
 var languageStrings = {
     'en': {
         'translation': {
-            'WELCOME' : "Welcome to Premier League 2.2, ",
+            'WELCOME' : "Welcome to Premier League 2.3, ",
             'HELP'    : "Say get table, a team name or nickname, red cards, yellow cards, clean sheets or golden boot ",
             'ABOUT'   : "Premier League is the best football league in the world.",
             'STOP'    : "Okay, see you next time!"
@@ -14,12 +14,20 @@ var languageStrings = {
     // , 'de-DE': { 'translation' : { 'TITLE'   : "Local Helfer etc." } }
 };
 
+var extraCmdPrompts = new Map();
+extraCmdPrompts.set("redcards", ". you can also say red cards");
+extraCmdPrompts.set("yellowcards", ". you can also say yellow card");
+extraCmdPrompts.set("cleansheets", ".  you can also ask about clean sheets");
+extraCmdPrompts.set("goals", ". you can also ask about goals");
+extraCmdPrompts.set("relegation", ". you can also ask about relegation");
+extraCmdPrompts.set("fixtures", ". you can also ask about fixtures");
+
 var variedPrompts = {
     "help": [
-        "Say get table, a team name, red cards, yellow cards, clean sheets or golden boot ",
-        "Ask about the table, a team, cards, goals or clean sheets ",
-        "Do you want to hear about a team, cards, goals, clean sheets, or the table ",
-        "We can tell you about the table, red or yellow cards, goals, clean sheets or a team "
+        "Say get table, or say a team name ",
+        "Ask about the table, or a team ",
+        "Say a command ",
+        "We can tell you about teams or the table "
         ]
 };
 
@@ -47,8 +55,9 @@ exports.handler = function(event, context, callback) {
 
 var handlers = {
     'LaunchRequest': function () {
-        var say = this.t('WELCOME') + ' ' + this.t('HELP');
-        loadMainTable(this, say, "maintable", this.t('HELP'));
+        var say = this.t('WELCOME') + ' Say get table, or say a team name ';
+
+        loadMainTable(this, say, "liveMainTable", this.t('HELP'));
     },
 
     'AboutIntent': function () {
@@ -56,23 +65,39 @@ var handlers = {
     },
 
     'CleanSheetsIntent': function() {
+        extraCmdPrompts.delete('cleansheets')
         var say = "the defenders with the most clean sheets are, ";
-        loadStats(this, say, "cleansheets", this.t('HELP'));
+        loadStats(this, say, 5, "cleansheets", ", with ", " has ", 1, 2, 4, this.t('HELP'));
     },
     
     'GoldenBootIntent': function() {
+        extraCmdPrompts.delete('goals')
         var say = "the players with the most goals are, ";
-        loadStats(this, say, "goldenboot", this.t('HELP'));
+        loadStats(this, say, 5, "goldenboot", ", with ", " has ", 1, 2, 4, this.t('HELP'));
     },
     
     'RedCardIntent': function() {
+        extraCmdPrompts.delete('redcards')
         var say = "the players with the most red cards are, ";
-        loadStats(this, say, "redcards", this.t('HELP'));
+        loadStats(this, say, 5, "redcards", ", with ", " has ", 1, 2, 4, this.t('HELP'));
     },
     
     'YellowCardIntent': function() {
+        extraCmdPrompts.delete('yellowcards')
         var say = "the players with the most yellow cards are, ";
-        loadStats(this, say, "yellowcards", this.t('HELP'));
+        loadStats(this, say, 5, "yellowcards", ", with ", " has ", 1, 2, 4, this.t('HELP'));
+    },
+
+    'RelegationIntent': function() {
+        extraCmdPrompts.delete('relegation')
+        var say = "the teams currently in the relegation zone are, ";
+        loadStats(this, say, 3, "relegation", "", " has ", 1, 2, 4, this.t('HELP'));
+    },
+
+    'FixturesIntent': function() {
+        extraCmdPrompts.delete('fixtures')
+        var say = "the fixtures for the next match week are, ";
+        loadStats(this, say, 10, "fixtures", " versus ", " at ", 0, 2, 3, this.t('HELP'));
     },
 
     'ListTeamNamesIntent': function () {
@@ -154,7 +179,7 @@ var handlers = {
           var say = 'The next five teams in the table are ' + buildTableFragment(tableIndex) + '. Would you like to hear more?';
           this.emit(':ask', say);
         } else {
-          var say2 = 'The last five teams in the table are ' + buildTableFragment(tableIndex) + '. do you want to list the table, ask about a team or stop?';
+          var say2 = 'The last five teams in the table are ' + buildTableFragment(tableIndex) + '.' + randomPrompt();
           this.emit(':ask', say2);
         }
 
@@ -162,7 +187,7 @@ var handlers = {
 
     'AMAZON.NoIntent': function () {
         // this.emit('AMAZON.StopIntent');
-        this.emit(':ask', 'do you want to list the table, ask about a team or stop?')
+        this.emit(':ask', randomPrompt())
     },
     
     'AMAZON.HelpIntent': function () {
@@ -181,7 +206,7 @@ var handlers = {
 
 // 3. Helper Function  =================================================================================================
 
-function loadStats(emmiter, say, filename, reprompt) {
+function loadStats(emmiter, say, number, filename, article1, article2, firstCol, secondCol, thirdCol, reprompt) {
     const bucket = "bpltables";
     const fileParams = {
         Bucket: bucket,
@@ -203,9 +228,9 @@ function loadStats(emmiter, say, filename, reprompt) {
 
             oneCard = n[0].split(',')
             
-            for(var index = 0; index < 5; index++) {
+            for(var index = 0; index < number; index++) {
                 oneCard = n[index].split(',')
-                var newText = oneCard[1] + " with " + oneCard[2] +  " has " + oneCard[4];
+                var newText = oneCard[firstCol] + article1 + oneCard[secondCol] +  article2 + oneCard[thirdCol];
                 say += ", " + newText;
                 cardText += newText + '\n';
             }
@@ -230,7 +255,21 @@ function pluralize(count, noun, ess) {
 function randomPrompt() {
     var low = 0;
     var high = 3;
-    return variedPrompts.help[Math.floor(Math.random() * (high - low + 1) + low)]
+    return variedPrompts.help[Math.floor(Math.random() * (high - low + 1) + low)] + suggest()
+}
+
+
+// This command lets us suggest commands to the user that they have not yet used
+function suggest() {
+    var suggestionsLeft = extraCmdPrompts.size;
+    console.log("num suggestions left:" + suggestionsLeft)
+    if(parseInt(suggestionsLeft) > 0) {
+        var firstKey = Array.from(extraCmdPrompts.keys())[0];
+        var firstValue = extraCmdPrompts.get(firstKey);
+        extraCmdPrompts.delete(firstKey);
+        return firstValue;
+    }
+    return ''
 }
 
 function findTeamIndex(data, teamName) {

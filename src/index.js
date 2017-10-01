@@ -1,12 +1,9 @@
 
-// 1. Text strings =====================================================================================================
-//    Modify these strings and messages to change the behavior of your Lambda function
-
 var languageStrings = {
     'en': {
         'translation': {
-            'WELCOME' : "Welcome to Premier League 2.3, ",
-            'HELP'    : "Say get table, a team name or nickname, red cards, yellow cards, clean sheets or golden boot ",
+            'WELCOME' : "Welcome to Premier League 2.4, ",
+            'HELP'    : "Say get table, a team name or nickname, red cards, yellow cards, clean sheets, golden boot, fixtures, results or relegation ",
             'ABOUT'   : "Premier League is the best football league in the world.",
             'STOP'    : "Okay, see you next time!"
         }
@@ -21,6 +18,8 @@ extraCmdPrompts.set("cleansheets", ".  you can also ask about clean sheets");
 extraCmdPrompts.set("goals", ". you can also ask about goals");
 extraCmdPrompts.set("relegation", ". you can also ask about relegation");
 extraCmdPrompts.set("fixtures", ". you can also ask about fixtures");
+extraCmdPrompts.set("results", ". you can also ask about last weeks results");
+extraCmdPrompts.set("referees", ". you can also ask about referees");
 
 var variedPrompts = {
     "help": [
@@ -30,13 +29,14 @@ var variedPrompts = {
         "We can tell you about teams or the table "
         ]
 };
+var invocation_count = 0;
+var question_count = 0;
 
 var data = {
     "teams" : Array(20)
 };
 
-
-// 2. Skill Code =======================================================================================================
+var interruptable = false;
 
 var Alexa = require('alexa-sdk');
 const aws = require('aws-sdk');
@@ -47,15 +47,38 @@ exports.handler = function(event, context, callback) {
     var alexa = Alexa.handler(event, context);
 
     // alexa.appId = 'amzn1.echo-sdk-ams.app.1234';
-    ///alexa.dynamoDBTableName = 'YourTableName'; // creates new table for session.attributes
+    alexa.dynamoDBTableName = 'PremierLeagueSkill'; // creates new table for session.attributes
     alexa.resources = languageStrings;
+    console.log("got here");
     alexa.registerHandlers(handlers);
+    console.log("and got here");
     alexa.execute();
 };
 
 var handlers = {
     'LaunchRequest': function () {
+        console.log('at top of LaunchRequest');
         var say = this.t('WELCOME') + ' Say get table, or say a team name ';
+        invocation_count = this.attributes['invocation_count'];
+        if (typeof invocation_count == "undefined") {
+            console.log('invocation_count was not found in dynamo, initializing it to 1');
+            this.attributes['invocation_count'] = 1;
+            invocation_count = 1;
+            this.attributes['question_count'] = 1;
+            question_count = 1;
+        } else {
+            invocation_count += 1;
+            this.attributes['invocation_count'] = invocation_count;
+            
+            question_count = this.attributes['question_count']
+            if (typeof question_count == "undefined") {
+                question_count = 1;
+            } else {
+                question_count += 1;
+            }
+            this.attributes['question_count'] = question_count;
+            console.log("invocation_count incremented to " + invocation_count + ", question_count " + question_count);
+        }
 
         loadMainTable(this, say, "liveMainTable", this.t('HELP'));
     },
@@ -65,40 +88,73 @@ var handlers = {
     },
 
     'CleanSheetsIntent': function() {
-        extraCmdPrompts.delete('cleansheets')
+        updateStats(this, 'cleansheets');//extraCmdPrompts.delete('cleansheets')
         var say = "the defenders with the most clean sheets are, ";
-        loadStats(this, say, 5, "cleansheets", ", with ", " has ", 1, 2, 4, this.t('HELP'));
+        loadStats(this, say, 5, "cleansheets", ", with ", " has ", "  ", 1, 2, 4, this.t('HELP'));
     },
     
     'GoldenBootIntent': function() {
-        extraCmdPrompts.delete('goals')
+        updateStats(this, 'goals');//extraCmdPrompts.delete('goals')
         var say = "the players with the most goals are, ";
-        loadStats(this, say, 5, "goldenboot", ", with ", " has ", 1, 2, 4, this.t('HELP'));
+        loadStats(this, say, 5, "goldenboot", ", with ", " has ", "  ", 1, 2, 4, this.t('HELP'));
     },
     
     'RedCardIntent': function() {
-        extraCmdPrompts.delete('redcards')
+        updateStats(this, 'redcards');//extraCmdPrompts.delete('redcards');
         var say = "the players with the most red cards are, ";
-        loadStats(this, say, 5, "redcards", ", with ", " has ", 1, 2, 4, this.t('HELP'));
-    },
+        loadStats(this, say, 5, "redcards", ", with ", " has ", "  ", 1, 2, 4, this.t('HELP'));
+    }, 
     
     'YellowCardIntent': function() {
-        extraCmdPrompts.delete('yellowcards')
+        updateStats(this, 'yellowcards');//extraCmdPrompts.delete('yellowcards');
         var say = "the players with the most yellow cards are, ";
-        loadStats(this, say, 5, "yellowcards", ", with ", " has ", 1, 2, 4, this.t('HELP'));
+        loadStats(this, say, 5, "yellowcards", ", with ", " has ", "  ", 1, 2, 4, this.t('HELP'));
     },
 
     'RelegationIntent': function() {
-        extraCmdPrompts.delete('relegation')
+        updateStats(this, 'relegation');//extraCmdPrompts.delete('relegation');
         var say = "the teams currently in the relegation zone are, ";
-        loadStats(this, say, 3, "relegation", "", " has ", 1, 2, 4, this.t('HELP'));
+        loadStats(this, say, 3, "relegation", "", " has ", "  ", 1, 2, 4, this.t('HELP'));
     },
 
     'FixturesIntent': function() {
-        extraCmdPrompts.delete('fixtures')
-        var say = "the fixtures for the next match week are, ";
-        loadStats(this, say, 10, "fixtures", " versus ", " at ", 0, 2, 3, this.t('HELP'));
+        extraCmdPrompts.delete('fixtures');
+        var say = "the fixtures for the current / upcoming match week are, ";
+        loadStats(this, say, 10, "fixtures2", " versus ", " at ", "  ", 0, 2, 3, this.t('HELP'));
     },
+
+    'ResultsIntent': function() {
+        extraCmdPrompts.delete('results');
+        var say = "the results for the last match week were, ";
+        loadStats(this, say, 10, "prevWeekFixtures", "  ", "  ", "  ", 0, 1, 2, this.t('HELP'));
+    },
+
+    'RefereesIntent': function() {
+        extraCmdPrompts.delete('referees');
+        var say = "the most used referees were, ";
+        loadStats(this, say, 5, "referees", " ", " yellow cards and ", " red cards", 0, 3, 2, this.t('HELP'));
+    },
+    
+    'StadiumIntent': function() {
+        extraCmdPrompts.delete('stadium');
+        var say = "You asked about a stadium, ";
+        //readFile(this, say, "stadiums/Etihad");
+        try {
+            if(this.event.request.intent.slots.stadiumType.hasOwnProperty('resolutions')) {
+                console.log('we got a resolution');
+            } else {
+                console.log('we did not get a resolution');
+            }
+            var cannonicalStadium = this.event.request.intent.slots.stadiumType.resolutions.resolutionsPerAuthority[0].values[0].value.id;
+            console.log("heard stadium " + cannonicalStadium);
+            readFile(this, say, ("stadiums/" + cannonicalStadium));
+        }catch(err){
+            console.log('sorry, we had a problem recognizing your stadium ' + err);
+            say = 'sorry, we had a problem recognizing your stadium, do you want to list the table, ask about a team or stop? ';
+            this.emit(':ask', say);
+        }
+    },
+
 
     'ListTeamNamesIntent': function () {
         console.log("at top of ListTeamNamesIntent");
@@ -127,9 +183,6 @@ var handlers = {
         console.log('at TeamIntent');
         if(this.event.request.intent.slots.plteam.hasOwnProperty('resolutions')) {
             console.log('we got a resolution');
-            //console.log('listening for team name ' + JSON.stringify(this.event.request.intent.slots.plteam.resolutions.resolutionsPerAuthority));
-            //console.log('listening for team name ' + JSON.stringify(this.event.request.intent.slots.plteam.resolutions.resolutionsPerAuthority[0].values));
-            //console.log('listening for team name ' + JSON.stringify(this.event.request.intent.slots.plteam.resolutions.resolutionsPerAuthority[0].values[0].value));
         } else {
             console.log('we did not get a resolution');
         }
@@ -186,27 +239,91 @@ var handlers = {
     },
 
     'AMAZON.NoIntent': function () {
-        // this.emit('AMAZON.StopIntent');
         this.emit(':ask', randomPrompt())
     },
     
     'AMAZON.HelpIntent': function () {
         this.emit(':ask', this.t('HELP'));
     },
+    
     'AMAZON.CancelIntent': function () {
         this.emit(':tell', this.t('STOP'));
     },
-    'AMAZON.StopIntent': function () {
+    
+    'AMAZON.ExitIntent': function () {
         this.emit(':tell', this.t('STOP'));
+    },
+    'Unhandled': function () {
+        this.emit(':tell', this.t('STOP'));
+    },
+    'SessionEndedRequest': function () {
+        this.emit(':tell', this.t('STOP'));
+    },    
+    
+    'AMAZON.StopIntent': function () {
+        if(interruptable) {
+            interruptable = false;
+            this.emit(':ask', "say stop to exit Premier League or say another command");
+        } else {
+            this.emit(':tell', this.t('STOP') + maybeAskForReview(this));
+        }
     }
-
 };
 
 //    END of Intent Handlers {} ========================================================================================
 
-// 3. Helper Function  =================================================================================================
+function maybeAskForReview(main) {
+    var askForReview = "";
+    if(question_count > 10) {
+        var haveAskedForReview = main.attributes['haveAskedForReview'];
+        if (typeof haveAskedForReview == "undefined") {
+            main.attributes['haveAskedForReview'] = true;
+            askForReview = ', and if you would like to write us a review, <prosody pitch="x-high"> that would be great</prosody>'
+        }
+    } 
+    return askForReview;
+}
 
-function loadStats(emmiter, say, number, filename, article1, article2, firstCol, secondCol, thirdCol, reprompt) {
+function updateStats(main, extraPrompt) {
+    if(extraPrompt.length > 0) {
+        extraCmdPrompts.delete(extraPrompt);
+    }    
+    question_count += 1;
+    main.attributes['question_count'] = question_count;
+}
+
+// read the entire contents of a file
+function readFile(emmiter, say, filename) {
+    const bucket = "bpltables";
+    const fileParams = {
+        Bucket: bucket,
+        Key: filename
+    };
+    var cardText = "";
+    interruptable = true;
+    
+    console.log('try to open file ' + bucket + ":" + filename);
+    s3.getObject(fileParams, function(err, data) {
+        if (err) {
+            console.log("did not find file " + filename + " because:" + err);
+            say += " unable to open file " + filename
+            emmiter.emit(':ask', say, say);
+        } else {
+            console.log("found file " + filename);
+            var body = data.Body.toString('ascii');
+            say += body;
+            
+            say += "<break time='1s'/>" + randomPrompt(); //reprompt;
+            console.log("about to say " + say);
+            console.log("card would be " + filename + ";" + cardText)
+            //emmiter.emit(':ask', say, say);
+            emmiter.emit(':askWithCard', say, randomPrompt(), filename, cardText)
+            interruptable = false;
+        }
+    });
+}
+
+function loadStats(emmiter, say, number, filename, article1, article2, article3, firstCol, secondCol, thirdCol, reprompt) {
     const bucket = "bpltables";
     const fileParams = {
         Bucket: bucket,
@@ -214,6 +331,7 @@ function loadStats(emmiter, say, number, filename, article1, article2, firstCol,
     };
     //var cardTitle = say;
     var cardText = "";
+    interruptable = true;
     
     console.log('try to open file ' + bucket + ":" + filename);
     s3.getObject(fileParams, function(err, data) {
@@ -230,7 +348,8 @@ function loadStats(emmiter, say, number, filename, article1, article2, firstCol,
             
             for(var index = 0; index < number; index++) {
                 oneCard = n[index].split(',')
-                var newText = oneCard[firstCol] + article1 + oneCard[secondCol] +  article2 + oneCard[thirdCol];
+                //var newText = oneCard[firstCol] + article1 + oneCard[secondCol] +  article2 + oneCard[thirdCol];
+                var newText = getOneLine(oneCard[firstCol], article1, oneCard[secondCol], article2, oneCard[thirdCol], article3);
                 say += ", " + newText;
                 cardText += newText + '\n';
             }
@@ -240,8 +359,21 @@ function loadStats(emmiter, say, number, filename, article1, article2, firstCol,
             console.log("card would be " + filename + ";" + cardText)
             //emmiter.emit(':ask', say, say);
             emmiter.emit(':askWithCard', say, randomPrompt(), filename, cardText)
+            interruptable = false;
         }
     });
+}
+
+function getOneLine(noun1, article1, noun2, article2, noun3, article3) {
+    console.log("at getOneFixture:" + noun1 + article1 + noun2 + article2 + noun3 + article3);
+    var foundNumber = noun1.search('[0-9]');
+    var foundNil = noun1.search('nil');
+    // console.log(noun1 + " has a score " + foundNumber);
+    if(foundNumber != -1 || foundNil != -1) {
+        return noun1 + "<break time='350ms'/>" + noun2;
+    } else {
+        return noun1 + article1 + noun2 + article2 + noun3 + article3 + ",";
+    }
 }
 
 function pluralize(count, noun, ess) {
@@ -257,7 +389,6 @@ function randomPrompt() {
     var high = 3;
     return variedPrompts.help[Math.floor(Math.random() * (high - low + 1) + low)] + suggest()
 }
-
 
 // This command lets us suggest commands to the user that they have not yet used
 function suggest() {

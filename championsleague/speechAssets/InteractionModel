@@ -1,0 +1,123 @@
+{
+  "languageModel": {
+    "types": [
+      {
+        "name": "grouptype",
+        "values": [
+          {
+            "id": "Group_a",
+            "name": {
+              "value": "Group A",
+              "synonyms": [
+                "group eh"
+              ]
+            }
+          },
+          {
+            "id": "Group_b",
+            "name": {
+              "value": "Group B",
+              "synonyms": [
+                "group be"
+              ]
+            }
+          },
+          {
+            "id": "group_c",
+            "name": {
+              "value": "Group C",
+              "synonyms": [
+                "group see"
+              ]
+            }
+          },
+          {
+            "id": "group_d",
+            "name": {
+              "value": "Group D",
+              "synonyms": [
+                "group dee"
+              ]
+            }
+          },
+          {
+            "id": "group_e",
+            "name": {
+              "value": "Group E",
+              "synonyms": [
+                "group ee"
+              ]
+            }
+          },
+          {
+            "id": "group_f",
+            "name": {
+              "value": "Group F",
+              "synonyms": [
+                "group eff"
+              ]
+            }
+          },
+          {
+            "id": "group_g",
+            "name": {
+              "value": "Group G",
+              "synonyms": [
+                "group gee"
+              ]
+            }
+          },
+          {
+            "id": "group_h",
+            "name": {
+              "value": "Group H",
+              "synonyms": [
+                "group hach"
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "intents": [
+      {
+        "name": "AMAZON.CancelIntent",
+        "samples": []
+      },
+      {
+        "name": "AMAZON.HelpIntent",
+        "samples": []
+      },
+      {
+        "name": "AMAZON.StopIntent",
+        "samples": []
+      },
+      {
+        "name": "GroupIntent",
+        "samples": [
+          "tell me about {groupslot}",
+          "how did {groupslot} do",
+          "get {groupslot}"
+        ],
+        "slots": [
+          {
+            "name": "groupslot",
+            "type": "grouptype"
+          }
+        ]
+      },
+      {
+        "name": "LeadersIntent",
+        "samples": [
+          "who are the leaders",
+          "tell me about the leaders",
+          "who are the group leaders",
+          "who is leading each group",
+          "who are the top teams"
+        ],
+        "slots": []
+      }
+    ],
+    "invocationName": "championsleague"
+  }
+}

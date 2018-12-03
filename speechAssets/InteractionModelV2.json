@@ -1,0 +1,292 @@
+{
+  "intents": [
+    {
+      "name": "AMAZON.CancelIntent",
+      "samples": []
+    },
+    {
+      "name": "AMAZON.HelpIntent",
+      "samples": []
+    },
+    {
+      "name": "AMAZON.NoIntent",
+      "samples": []
+    },
+    {
+      "name": "AMAZON.StopIntent",
+      "samples": []
+    },
+    {
+      "name": "AMAZON.YesIntent",
+      "samples": []
+    },
+    {
+      "name": "CleanSheetsIntent",
+      "samples": [
+        "clean sheets",
+        "who has clean sheets",
+        "which keepers got clean sheets",
+        "which goal tenders have clean sheets"
+      ],
+      "slots": []
+    },
+    {
+      "name": "GoldenBootIntent",
+      "samples": [
+        "golden boot",
+        "most goals",
+        "top scorers",
+        "who has the most goals",
+        "which players have the most goals"
+      ],
+      "slots": []
+    },
+    {
+      "name": "ListTeamNamesIntent",
+      "samples": [
+        "list team names",
+        "what are the team names"
+      ],
+      "slots": []
+    },
+    {
+      "name": "RedCardIntent",
+      "samples": [
+        "red cards",
+        "who has red cards",
+        "which players got red cards"
+      ],
+      "slots": []
+    },
+    {
+      "name": "TableIntent",
+      "samples": [
+        "what is the table",
+        "list the table",
+        "show the table",
+        "what are the standings"
+      ],
+      "slots": []
+    },
+    {
+      "name": "TeamIntent",
+      "samples": [
+        "how did {plteam} do",
+        "tell me about {plteam}",
+        "describe {plteam}",
+        "show {plteam}"
+      ],
+      "slots": [
+        {
+          "name": "plteam",
+          "type": "plTeam",
+          "samples": []
+        }
+      ]
+    },
+    {
+      "name": "YellowCardIntent",
+      "samples": [
+        "yellow cards",
+        "who has yellow cards",
+        "which players got yellow cards"
+      ],
+      "slots": []
+    }
+  ],
+  "types": [
+    {
+      "name": "plTeam",
+      "values": [
+        {
+          "id": "ManchesterUnited",
+          "name": {
+            "value": "Manchester United",
+            "synonyms": [
+              "man you"
+            ]
+          }
+        },
+        {
+          "id": "ManchesterCity",
+          "name": {
+            "value": "Manchester City",
+            "synonyms": [
+              "citizens"
+            ]
+          }
+        },
+        {
+          "id": "HuddersfieldTown",
+          "name": {
+            "value": "Huddersfield Town",
+            "synonyms": [
+              "terriers",
+              "the terriers",
+              "town"
+            ]
+          }
+        },
+        {
+          "id": "Burnley",
+          "name": {
+            "value": "Burnley",
+            "synonyms": [
+              "clarets"
+            ]
+          }
+        },
+        {
+          "id": "Everton",
+          "name": {
+            "value": "Everton",
+            "synonyms": [
+              "toffees"
+            ]
+          }
+        },
+        {
+          "id": "WestBromwichAlbion",
+          "name": {
+            "value": "West Bromwich Albion",
+            "synonyms": [
+              "Albion",
+              "west brom"
+            ]
+          }
+        },
+        {
+          "id": "Liverpool",
+          "name": {
+            "value": "Liverpool",
+            "synonyms": [
+              "the reds"
+            ]
+          }
+        },
+        {
+          "id": "Watford",
+          "name": {
+            "value": "Watford",
+            "synonyms": [
+              "hornets"
+            ]
+          }
+        },
+        {
+          "id": "Southhampton",
+          "name": {
+            "value": "Southhampton",
+            "synonyms": [
+              "saints"
+            ]
+          }
+        },
+        {
+          "id": "SwanseaCity",
+          "name": {
+            "value": "Swansea City",
+            "synonyms": [
+              "Swansea",
+              "Swans"
+            ]
+          }
+        },
+        {
+          "id": "Brighton",
+          "name": {
+            "value": "Brighton",
+            "synonyms": []
+          }
+        },
+        {
+          "id": "Newcastle",
+          "name": {
+            "value": "Newcastle",
+            "synonyms": [
+              "newcastle united",
+              "magpies"
+            ]
+          }
+        },
+        {
+          "id": "TottenhamHotspurs",
+          "name": {
+            "value": "Tottenham Hotspurs",
+            "synonyms": [
+              "spurs",
+              "hotspurs",
+              "tottenham"
+            ]
+          }
+        },
+        {
+          "id": "WestHamUnited",
+          "name": {
+            "value": "West Ham United",
+            "synonyms": [
+              "West Ham",
+              "Hammers"
+            ]
+          }
+        },
+        {
+          "id": "LeicesterCity",
+          "name": {
+            "value": "Leicester City",
+            "synonyms": [
+              "foxes",
+              "Leicester"
+            ]
+          }
+        },
+        {
+          "id": "Chelsea",
+          "name": {
+            "value": "Chelsea",
+            "synonyms": [
+              "the blues"
+            ]
+          }
+        },
+        {
+          "id": "Bournemoth",
+          "name": {
+            "value": "Bournemoth",
+            "synonyms": [
+              "cherries"
+            ]
+          }
+        },
+        {
+          "id": "StokeCity",
+          "name": {
+            "value": "Stoke City",
+            "synonyms": [
+              "potters",
+              "stoke"
+            ]
+          }
+        },
+        {
+          "id": "CrystalPalace",
+          "name": {
+            "value": "Crystal Palace",
+            "synonyms": [
+              "palace"
+            ]
+          }
+        },
+        {
+          "id": "Arsenal",
+          "name": {
+            "value": "Arsenal",
+            "synonyms": [
+              "gunners"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -52,11 +52,7 @@ class WelcomeHandler(AbstractRequestHandler):
         load_suggestions()
         load_main_table()
         logger.info("first place is {} and last place is {}".format(table_data[0][0], table_data[19][0]))
-        #logger.info(build_relegation_fragment())
-        #logger.info(build_table_fragment(table_index))
         speech = WELCOME_MESSAGE + ' Say get table, or say a team name '
-        # handler_input.response_builder.ask(speech)
-        # return handler_input.response_builder.response
         handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Hello PremierLeague", speech))
         return handler_input.response_builder.response
 
@@ -76,9 +72,29 @@ class GoalsHandler(AbstractRequestHandler):
         intro = random_phrase(0,2, goal_phrases)
         
         speech, card_text = load_stats(5, "goldenboot", ", with ", " has ", "  ", 1, 2, 4)
-        speech = intro + speech + ',' + random_prompt();
+        speech = intro + speech + ',' + random_prompt()
         
         handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Goals", card_text))
+        return handler_input.response_builder.response
+
+class ListTeamNamesHandler(AbstractRequestHandler):
+    """Handler for ListTeamNamesIntent."""
+
+    def can_handle(self, handler_input):
+        logger.info("in can_handle ListTeamNamesHandler")
+        return (is_intent_name("ListTeamNamesIntent")(handler_input))
+
+    def handle(self, handler_input):
+        logger.info("In ListTeamNamesHandler")
+        team_name_phrases = ["We recognize the following team names","These are the teams in the best league in the world","The best teams are"]
+        intro = random_phrase(0,2, team_name_phrases)
+        speech  = ',,Arsenal, Aston Villa, Bournemouth, Brighton and Hove Albion, Burnley, Chelsea, Crystal Palace,'
+        speech += 'Everton, Leicester City, Liverpool, Manchester City, Manchester United, Newcastle United,'
+        speech += 'Norwich City, Sheffield United, Southampton, Tottenham Hotspur, Watford, West Ham United and Wolverhamton Wandereres,,'
+        speech += 'You can also refer to teams by their nicknames like gunners or toffees'
+        speech = intro + speech
+        
+        handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Team Names", intro + speech))
         return handler_input.response_builder.response
 
 
@@ -87,7 +103,6 @@ class CleanSheetsHandler(AbstractRequestHandler):
 
     def can_handle(self, handler_input):
         logger.info("in can_handle CleanSheetsHandler")
-        logger.info("intent_name is " + get_intent_name(handler_input))
         return (is_intent_name("CleanSheetsIntent")(handler_input))
 
     def handle(self, handler_input):
@@ -98,17 +113,17 @@ class CleanSheetsHandler(AbstractRequestHandler):
         intro = random_phrase(0,2, clean_phrases)
         
         speech, card_text = load_stats(5, "cleansheets", ", with ", " has ", "  ", 1, 2, 4)
-        speech = intro + speech + ',' + random_prompt();
+        speech = intro + speech + ',' + random_prompt()
         
         handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Goals", card_text))
         return handler_input.response_builder.response
+
 
 class ResultsHandler(AbstractRequestHandler):
     """Handler for ResultsIntent."""
 
     def can_handle(self, handler_input):
         logger.info("in can_handle ResultsHandler")
-        #logger.info("intent_name is " + get_intent_name(handler_input))
         return (is_intent_name("ResultsIntent")(handler_input))
 
     def handle(self, handler_input):
@@ -124,12 +139,12 @@ class ResultsHandler(AbstractRequestHandler):
         handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Results", card_text))
         return handler_input.response_builder.response
 
+
 class FixturesHandler(AbstractRequestHandler):
     """Handler for FixturesIntent."""
 
     def can_handle(self, handler_input):
         logger.info("in can_handle FixturesHandler")
-        #logger.info("intent_name is " + get_intent_name(handler_input))
         return (is_intent_name("FixturesIntent")(handler_input))
 
     def handle(self, handler_input):
@@ -140,7 +155,7 @@ class FixturesHandler(AbstractRequestHandler):
         intro = random_phrase(0,2, fixture_phrases)
         
         speech, card_text = load_stats_ng(10, "fixtures2", " versus ", " ", "  ", 0, 2, -1)
-        speech = intro + speech + ',' + random_prompt();
+        speech = intro + speech + ',' + random_prompt()
         
         handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Fixtures", card_text))
         return handler_input.response_builder.response
@@ -161,7 +176,7 @@ class FoulsHandler(AbstractRequestHandler):
         intro = random_phrase(0,2, foul_phrases)
         
         speech, card_text = load_stats(5, "fouls", ", with ", " has ", "  ", 1, 2, 4)
-        speech = intro + speech + ',' + random_prompt();
+        speech = intro + speech + ',' + random_prompt()
         
         handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Fouls", card_text))
         return handler_input.response_builder.response
@@ -182,10 +197,11 @@ class YellowCardHandler(AbstractRequestHandler):
         intro = random_phrase(0,2, yellow_phrases)
         
         speech, card_text = load_stats(5, "yellowcards", ", with ", " has ", "  ", 1, 2, 4)
-        speech = intro + speech + ',' + random_prompt();
+        speech = intro + speech + ',' + random_prompt()
         
         handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Yellow Cards", card_text))
         return handler_input.response_builder.response
+
 
 class RedCardHandler(AbstractRequestHandler):
     """Handler for RedCardIntent."""
@@ -223,10 +239,11 @@ class TouchesHandler(AbstractRequestHandler):
         intro = random_phrase(0,2, touch_phrases)
         
         speech, card_text = load_stats(5, "touches", ", with ", " has ", "  ", 1, 2, 4)
-        speech = intro + speech + ',' + random_prompt();
+        speech = intro + speech + ',' + random_prompt()
         
         handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Touches", card_text))
         return handler_input.response_builder.response
+
 
 class TacklesHandler(AbstractRequestHandler):
     """Handler for TacklesIntent."""
@@ -243,11 +260,10 @@ class TacklesHandler(AbstractRequestHandler):
         intro = random_phrase(0,2, tackles_phrases)
         
         speech, card_text = load_stats(5, "tackles", ", with ", " has ", "  ", 1, 2, 4)
-        speech = intro + speech + ',' + random_prompt();
+        speech = intro + speech + ',' + random_prompt()
         
         handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Tackles", card_text))
         return handler_input.response_builder.response
-
 
 
 class RefereesHandler(AbstractRequestHandler):
@@ -255,7 +271,6 @@ class RefereesHandler(AbstractRequestHandler):
 
     def can_handle(self, handler_input):
         logger.info("in can_handle RefereesHandler")
-        logger.info("intent_name is " + get_intent_name(handler_input))
         return (is_intent_name("RefereesIntent")(handler_input))
 
     def handle(self, handler_input):
@@ -285,24 +300,8 @@ class TeamHandler(AbstractRequestHandler):
         logger.info("In TeamHandler")
         reload_main_table_as_needed()
         slot = get_slot(handler_input, "plteam")
-        ##logger.info("type for slot is {} and confirmation_status is {}".format(type(slot), slot.confirmation_status))
-        ##logger.info("resolutions are {} with type {}".format(slot.resolutions, type(slot.resolutions)))
-        ##logger.info("resolution attribute map {}".format(slot.resolutions.attribute_map))
-        ##logger.info("resolution attribute str {}".format(slot.resolutions.to_str()))
-        ##logger.info("resolution attribute dict {}".format(slot.resolutions.to_dict()))
         dict = slot.resolutions.to_dict()
         success = dict['resolutions_per_authority'][0]["status"]["code"]
-        ##team_id = dict['resolutions_per_authority'][0]["values"][0]["value"]["id"]
-        ##team_name = dict['resolutions_per_authority'][0]["values"][0]["value"]["name"]
-        ##logger.info("{} found team {} {}".format(success, team_id, team_name))
-        #slot_json = json.loads(slot.resolutions.to_str())
-        #logger.info("slot as json {}".format(slot_json))
-        #logger.info("slot as json[0] {}".format(slot_json[0]))
-        #logger.info("team slot is {}".format(get_slot(handler_input, "plteam")))
-        #slot_str = get_slot_value(handler_input, "plteam")
-        #logger.info("type for slot_str is {}".format(type(slot_str)))
-        #slot = json.loads(slot_str)
-        #resolution = slot["resolutions"]["resolutions_per_authority"][0]["status"]["code"]
         if success == 'ER_SUCCESS_MATCH':
             team_id = dict['resolutions_per_authority'][0]["values"][0]["value"]["id"]
             team_name = dict['resolutions_per_authority'][0]["values"][0]["value"]["name"]
@@ -322,8 +321,9 @@ class TeamHandler(AbstractRequestHandler):
                 form = get_excitement_prefix(this_team_index) + form + get_excitement_suffix()
                 speech = speech + form + random_prompt()
         else:
-            logger.info("could not find team with that name")
-        #speech =  random_prompt();
+            err_msg = "could not find team with that name, please try again or ask us for a list of team names"
+            logger.info(err_msg)
+            speech = err_msg
         
         handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Hello PremierLeague", speech))
         return handler_input.response_builder.response
@@ -334,7 +334,6 @@ class RelegationHandler(AbstractRequestHandler):
 
     def can_handle(self, handler_input):
         logger.info("in can_handle RelegationHandler")
-        logger.info("intent_name is " + get_intent_name(handler_input))
         return (is_intent_name("RelegationIntent")(handler_input))
 
     def handle(self, handler_input):
@@ -344,17 +343,17 @@ class RelegationHandler(AbstractRequestHandler):
         relegation_phrases = ["in the relegation zone ","facing relegation","in danger "];
         thisPhrase = random_phrase(0,2, relegation_phrases);
         speech = "the teams currently " + thisPhrase + " are " + build_relegation_fragment();
-        speech = speech + ',' + random_prompt();
+        speech = speech + ',' + random_prompt()
         
         handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Hello PremierLeague", speech))
         return handler_input.response_builder.response
+
 
 class TableHandler(AbstractRequestHandler):
     """Handler for TableIntent."""
 
     def can_handle(self, handler_input):
         logger.info("in can_handle TableHandler")
-        #logger.info("intent_name is " + get_intent_name(handler_input))
         return (is_intent_name("TableIntent")(handler_input))
 
     def handle(self, handler_input):
@@ -375,7 +374,6 @@ class YesHandler(AbstractRequestHandler):
 
     def can_handle(self, handler_input):
         logger.info("in can_handle YesHandler")
-        #logger.info("intent_name is " + get_intent_name(handler_input))
         return (is_intent_name("AMAZON.YesIntent")(handler_input))
 
     def handle(self, handler_input):
@@ -400,7 +398,6 @@ class NoHandler(AbstractRequestHandler):
 
     def can_handle(self, handler_input):
         logger.info("in can_handle NoHandler")
-        #logger.info("intent_name is " + get_intent_name(handler_input))
         return (is_intent_name("AMAZON.NoIntent")(handler_input))
 
     def handle(self, handler_input):
@@ -524,7 +521,7 @@ sb.add_request_handler(TableHandler())
 sb.add_request_handler(YesHandler())
 sb.add_request_handler(NoHandler())
 sb.add_request_handler(TeamHandler())
-#sb.add_request_handler(ListTeamNamesHandler())
+sb.add_request_handler(ListTeamNamesHandler())
 #sb.add_request_handler(StadiumHandler())
 sb.add_request_handler(RefereesHandler())
 sb.add_request_handler(GoalsHandler())
@@ -558,6 +555,7 @@ GOALS_FOR_INDEX = 5
 GOALS_AGAINST_INDEX = 6
 GOAL_DIFF_INDEX = 7
 POINTS_INDEX = 8
+extra_cmd_prompts = {}
 
 def find_team_index(team_id):
     reload_main_table_as_needed()
@@ -567,9 +565,11 @@ def find_team_index(team_id):
             return index
         index = index + 1
     return -1
+
     
 def random_phrase(low, high, phrases):
     return phrases[randrange(low, high)];
+
 
 def random_prompt():
     return variedPrompts[randrange(0, 3)] + suggest();
@@ -580,7 +580,6 @@ def pluralize(count, noun, ess):
         return count + " " + noun
     else:
         return count + " " + noun + ess
-extra_cmd_prompts = {}
 
 def load_suggestions():
     extra_cmd_prompts["touches"] = ". you can also ask about touches"
@@ -606,6 +605,7 @@ def suggest():
         del extra_cmd_prompts[key]
         return value
     return ""
+
     
 def build_table_fragment(table_index):
     table_fragment = ""
@@ -613,15 +613,8 @@ def build_table_fragment(table_index):
         table_fragment = table_fragment + say_place(index+1) + " " + table_data[index][NAME_INDEX] + " with " + pluralize(table_data[index][POINTS_INDEX], 'point', 's') + ', '
     returned_str = get_excitement_prefix(table_index) + table_fragment + get_excitement_suffix()
     table_index = table_index + 5
-    #if table_index == 5:
-    #    return '<amazon:emotion name="excited" intensity="high">' + table_fragment + '</amazon:emotion>'
-    #elif table_index == 10:
-    #    return '<amazon:emotion name="excited" intensity="medium">' + table_fragment + '</amazon:emotion>'
-    #elif table_index == 15:
-    #    return '<amazon:emotion name="disappointed" intensity="medium">' + table_fragment + '</amazon:emotion>'
-    #else:
-    #    return '<amazon:emotion name="disappointed" intensity="high">' + table_fragment + '</amazon:emotion>'
     return returned_str
+
     
 def build_relegation_fragment():
     logger.info("at build_relegation_fragment")
@@ -645,16 +638,12 @@ def get_excitement_prefix(index):
     
     if index < 5:
         return '<amazon:emotion name="excited" intensity="{}">'.format(high_or_medium)
-        #return '<amazon:emotion name="excited" intensity="high">'
     elif index < 10:
         return '<amazon:emotion name="excited" intensity="{}">'.format(medium_or_low)
-        #return '<amazon:emotion name="excited" intensity="medium">'
     elif index < 10:
         return '<amazon:emotion name="disappointed" intensity="{}">'.format(medium_or_low)
-        #return '<amazon:emotion name="disappointed" intensity="medium">'
     else:
         return '<amazon:emotion name="disappointed" intensity="high">'.format(high_or_medium)
-        #return '<amazon:emotion name="disappointed" intensity="high">'
         
         
 def get_excitement_suffix():
@@ -683,16 +672,12 @@ def load_main_table():
     logger.info("about to open main table")
     resp = s3.get_object(Bucket="bpltables", Key="liveMainTable")
     logger.info("back from open main table")
-    #logger.info(resp['Body'])
     body_str = string_data = resp['Body'].read().decode("utf-8")
     logger.info("converted streaming_body to string")
-    #logger.info(body_str)
     x = body_str.split("\n")
     team_index = 0
     for team in x:
-        #logger.info(team)
         one_team = team.split(",")
-        #logger.info("team {} {} wins {} points {}".format(team_index, one_team[0],one_team[2],one_team[8]))
         table_data.append(one_team)
         team_index = team_index + 1
         if team_index > 19:
@@ -702,10 +687,8 @@ def load_main_table():
 
 
 def normalize_score(score):
-    #logger.info("normalizing score {}".format(score))
     if score.find(" to ") != -1:
         res = score.split(" ")
-        #logger.info("len of split score is {}".format(len(res)))
         if res[2] > res[0]:
             score = res[2] + " " + res[1] + " " + res[0]
         score = score.replace("0", "nil")
@@ -715,19 +698,17 @@ def normalize_score(score):
 
     
 def get_one_line(noun1, article1, noun2, article2, noun3, article3):
-    #logger.info("at get_one_line")
-    #foundNumber = noun1.search('[0-9]');
     found_number_or_none = re.search("[0-9]", noun1)
     found_number = False if found_number_or_none is None else True
     
     found_nil = noun1.find('nil')
-    #foundNil = noun1.search('nil');
     
     noun3 = normalize_score(noun3)
     if found_number or found_nil != -1:
         return noun1 + "<break time='350ms'/>" + noun2
     else:
         return noun1 + article1 + noun2 + article2 + noun3 + article3 + ","
+
     
 def load_stats_ng(number, filename, article1, article2, article3, firstCol, secondCol, thirdCol):
     say = ""
@@ -755,6 +736,7 @@ def load_stats_ng(number, filename, article1, article2, article3, firstCol, seco
             card_text = card_text + new_text + "\n"
         index += 1
     return (say, card_text)            
+
     
 def load_stats(number, filename, article1, article2, article3, firstCol, secondCol, thirdCol):
     say = ""
@@ -776,5 +758,4 @@ def load_stats(number, filename, article1, article2, article3, firstCol, secondC
         say = say + ", " + new_text
         card_text = card_text + new_text + "\n"
         logger.info("building at index {} {}".format(index, say))
-    #say = '<amazon:domain name="news">' + say + '</amazon:domain>'
     return (say, card_text)

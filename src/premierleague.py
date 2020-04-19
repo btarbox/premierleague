@@ -33,7 +33,7 @@ EXCEPTION_MESSAGE = "Sorry. I cannot help you with that."
 sb = SkillBuilder()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-WELCOME_MESSAGE = "Welcome to Python PremierLeague"
+WELCOME_MESSAGE = "Welcome to PremierLeague"
 table_data = []
 table_index = 0
 variedPrompts = ["Say get table, or say a team name ", "Ask about the table or a team", "Say a command ", "We can tell you about teams or the table"]
@@ -328,6 +328,44 @@ class TeamHandler(AbstractRequestHandler):
         handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Hello PremierLeague", speech))
         return handler_input.response_builder.response
 
+class StadiumHandler(AbstractRequestHandler):
+    """Handler for StadiumIntent."""
+
+    def can_handle(self, handler_input):
+        logger.info("in can_handle StadiumHandler")
+        return (is_intent_name("StadiumIntent")(handler_input))
+
+    def handle(self, handler_input):
+        logger.info("In StadiumHandler")
+        if "stadiums" in extra_cmd_prompts:
+            del extra_cmd_prompts["stadiums"]
+        slot = get_slot(handler_input, "stadiumType")
+        dict = slot.resolutions.to_dict()
+        success = dict['resolutions_per_authority'][0]["status"]["code"]
+        if success == 'ER_SUCCESS_MATCH':
+            stadium_id = dict['resolutions_per_authority'][0]["values"][0]["value"]["id"]
+            stadium_name = dict['resolutions_per_authority'][0]["values"][0]["value"]["name"]
+            logger.info("found stadium {} {}".format(stadium_id, stadium_name))
+
+            s3 = boto3.client("s3")
+            bucket = "bpltables"
+            key = "stadiums/" + stadium_name
+            logger.info('try to open file ' + bucket + ":" + key)
+            resp = s3.get_object(Bucket=bucket, Key=key)
+            body_str = resp['Body'].read().decode("utf-8")
+            logger.info("converted streaming_body to string")
+            
+            speech = body_str
+        else:
+            logger.info("could not find stadium")
+            speech = "Sorry, we could not find that stadium"
+        #speech = "in development"
+        card_text = "in development"
+        
+        handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Stadium", card_text))
+        return handler_input.response_builder.response
+
+
 
 class RelegationHandler(AbstractRequestHandler):
     """Handler for RelegationIntent."""
@@ -522,7 +560,7 @@ sb.add_request_handler(YesHandler())
 sb.add_request_handler(NoHandler())
 sb.add_request_handler(TeamHandler())
 sb.add_request_handler(ListTeamNamesHandler())
-#sb.add_request_handler(StadiumHandler())
+sb.add_request_handler(StadiumHandler())
 sb.add_request_handler(RefereesHandler())
 sb.add_request_handler(GoalsHandler())
 sb.add_request_handler(TouchesHandler())
@@ -557,13 +595,12 @@ GOAL_DIFF_INDEX = 7
 POINTS_INDEX = 8
 extra_cmd_prompts = {}
 
+
 def find_team_index(team_id):
     reload_main_table_as_needed()
-    index = 0
-    for team in table_data:
-        if team[0].upper().replace(" ", "") == team_id.upper():
+    for index, team in enumerate(table_data):
+        if team[NAME_INDEX].upper().replace(" ", "") == team_id.upper():
             return index
-        index = index + 1
     return -1
 
     
@@ -640,7 +677,7 @@ def get_excitement_prefix(index):
         return '<amazon:emotion name="excited" intensity="{}">'.format(high_or_medium)
     elif index < 10:
         return '<amazon:emotion name="excited" intensity="{}">'.format(medium_or_low)
-    elif index < 10:
+    elif index < 15:
         return '<amazon:emotion name="disappointed" intensity="{}">'.format(medium_or_low)
     else:
         return '<amazon:emotion name="disappointed" intensity="high">'.format(high_or_medium)
@@ -672,7 +709,7 @@ def load_main_table():
     logger.info("about to open main table")
     resp = s3.get_object(Bucket="bpltables", Key="liveMainTable")
     logger.info("back from open main table")
-    body_str = string_data = resp['Body'].read().decode("utf-8")
+    body_str = resp['Body'].read().decode("utf-8")
     logger.info("converted streaming_body to string")
     x = body_str.split("\n")
     team_index = 0
@@ -745,7 +782,7 @@ def load_stats(number, filename, article1, article2, article3, firstCol, secondC
     bucket = "bpltables"
     logger.info('try to open file ' + bucket + ":" + filename)
     resp = s3.get_object(Bucket=bucket, Key=filename)
-    body_str = string_data = resp['Body'].read().decode("utf-8")
+    body_str = resp['Body'].read().decode("utf-8")
     logger.info("converted streaming_body to string")
     logger.info(body_str)
     n = body_str.split("\n")

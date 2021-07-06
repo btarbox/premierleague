@@ -1,10 +1,370 @@
-Bournemouth,1 to 1,Southampton
-Man City,2 to 1,West Ham
-Chelsea,3 to 1,Newcastle
-West Brom,nil to nil,Crystal Palace
-Watford,1 to 1,Spurs
-Stoke,2 to 1,Swansea
-Leicester,1 to nil,Burnley
-Everton,2 to nil,Huddersfield
-Brighton,1 to 5,Liverpool
-Arsenal,1 to 3,Man Utd
+Arsenal beat,2 to 0,Brighton
+Aston Villa beat,2 to 1,Chelsea
+Fulham lost to,0 to 2,Newcastle
+Leeds beat,3 to 1,West Brom
+Leicester lost to,2 to 4,Spurs
+Liverpool beat,2 to 0,Crystal Palace
+Man City beat,5 to 0,Everton
+Sheffield Utd beat,1 to 0,Burnley
+West Ham beat,3 to 0,Southampton
+Wolves lost to,1 to 2,Manchester United
+Everton beat,1 to 0,Wolves
+Newcastle beat,1 to 0,Sheffield
+Spurs lost to,1 to 2,Aston Villa
+Crystal Palace lost to,1 to 3,Arsenal
+Manchester United drew,1 to 1,Fulham
+Southampton lost to,0 to 2,Leeds
+Brighton beat,3 to 2,Manchester City
+Chelsea beat,2 to 1,Leicester
+West Brom lost to,1 to 2,Liverpool
+Crystal Palace beat,3 to 2,Aston Villa
+Spurs beat,2 to 0,Wolves
+Southampton beat,3 to 1,Fulham
+Burnley lost to,0 to 4,Leeds
+Aston Villa drew,0 to 0,Everton
+Manchester United lost to,2 to 4,Liverpool
+Chelsea lost to,0 to 1,Arsenal
+Southampton beat,3 to 1,Crystal Palace
+Man United lost,1 to 2,Leicester
+Wolves beat,2 to 1,Brighton
+Aston Villa lost to,1 to 3,Man United
+West Ham lost to,0 to 1,Everton
+Arsenal beat,3 to 1,West Brom
+Manchester City lost to,1 to 2,Chelsea
+Liverpool beat,2 to 0,Southampton
+Sheffield lost to,0 to 2,Crystal Palace
+Leeds beat,3 to 1,Spurs
+Leicester lost to,2 to 4,Newcastle
+West Brom drew,1 to 1,Wolves
+Burnley lost to,1 to 2,West Ham
+Spurs beat,4 to 0,Sheffield`
+Newcastle lost to,0 to 2,Arsenal
+Everton lost to,1 to 2,Aston Villa
+Brighton beat,2 to 0,Leeds
+Chelsea best,2 to 0,Fulham
+Crystal Palace lost to,0 to 2,Manchester City
+Southampton drew,1 to 1,Leicester
+Leicester beat,2 to 1,Crystal Palace
+Wolves lost to,0 to 4,Burnley
+Leeds drew,0 to 0,Manchester United
+Sheffield beat,1 to 0,Brighton
+Westham lost to,0 to 1,Chelsea
+Liverpool drew,1 to 1,Newcastle
+Arsenal lost to,0 to 1,Everton
+Leicester beat,3 to 0,Aston Villa
+Spurs beat,2 to 1,Southampton
+Aston Villa lost to,1 to 2,Manchester City
+Chelsea drew,0 to 0,Brighton
+Leeds drew,1 to 1,Liverpool
+Arsenal drew,1 to 1,Fulham
+Manchester United beat,3 to 1,Burnley
+Arsenal drew,1 to 1,Fulham
+Wolves beat,1 to 0,Sheffield
+Newcastle beat,3 to 2,West Ham
+Everton drew,2 to 2,Spurs
+West Brom beat,3 to 0,Southampton
+Brighton drew,0 to 0,Everton
+Spurs lost to,1 to 3,Manchester United
+Sheffield lost to,0 to 3,Arsenal
+West Ham beat,3 to 2,Leicester
+Burley lost to,1 to 2,Newcastle
+Liverpool beat,2 to 1,Aston Villa
+Manchester City lost to,1 to 2,Leeds
+Crytal Palace lost to,1 to 4,Chelsea
+Wolves lost to,2 to 3,West Ham
+Everton drew,1 to 1,Crystal Palace
+Aston Villa beat,3 to 1,Fulham
+Newcastle drew,2 to 2,Spurs
+Arsenal lost to,0 to 3,Liverpool
+Leicester lost to,0 to 2,Manchester City
+Leeds beat,2 to 1,Sheffield
+Chelsea lost to,2 to 5,West Brom
+Aston Villa lost to,0 to 2,Spurs
+West Ham drew,3 to 3,Arsenal
+Brighton beat,3 to 0,Newcastle
+Fulham lost,1 to 2,Leeds
+Wolves lost to,0 to 1,Liverpool
+Manchester United beat,1 to 0,West Ham
+Arsenal beat,2 to 1,Spurs
+Leicester beat,5 to 0,Sheffield
+Southampton lost to,1 to 2,Brighton
+Crystal Palace beat,1 to 0,West Brom
+Leeds drew,0 to 0,Chelsea
+Newcastle drew,1 to 1,Aston Villa
+Manchester City beat,5 to 2,Southampton
+Chelsea beat,2 to 0,Everton
+West Ham beat,2 to 0,Leeds
+Tottenham beat,4 to 1,Crystal Palace
+West Brom drew,0 to 0,Newcastle
+Liverpool lost to,0 to 1,Fulham
+Manchester City lost,0 to 2,Manchester United
+Burnley drew,1 to 1,Arsenal
+Sheffield lost to,0 to 2,Southampton
+Aston Villa drew,0 to 0,Wolves
+Brighton lost to,1 to 2,Leicester
+Liverpool lost to,0 to 1,Chelsea
+Fulham lost to,0 to 1,Tottenham
+West Brom lost to,0 to 1,Everton
+Manchester City beat,4 to 1,Wolves
+Everton beat,1 to 0,Southampton
+Spurs beat,4 to 0,Burnley
+Chelsea drew,0 to 0,Man United
+Sheffield lost to,0 to 2,Liverpool
+Crystal Palace drew,0 to 0,Fulham
+Leicester lost to,1 to 3,Arsenal
+Man City beat,2 to 1,West Ham
+West Brom beat,1 to 0,Brighton
+Leeds beat,3 to 0,Southampton
+Newcastle drew,1 to 1,Wolves
+Brighton lost to,1 to 2,Crystal Palace
+Arsenal lost to,0 to 1,Manchester City
+Manchester United beat,3 to 1,Newcastle
+West Ham beat,2 to 1,Spurs
+Aston Villa lost to,1 to 2,Leicester
+Burnley drew,0 to 0,West Brom
+Liverpool lost to,0 to 2,Everton
+Fulham beat,1 to 0,Sheffield
+Southampton drew,1 to 1,Chelsea
+Wolves beat,1 to 0,Leeds
+Burnley drew,1 to 1,Fulham
+Everton lost to,1 to 3,Manchester City
+West Ham beat,3 to 0,Sheffield
+Chelsea beat,2 to 0,Newcastle
+Arsenal beat,4 to 2,Fulham
+Everton lost to,0 to 2,Fulham
+West Brom drew,1 to 1,Manchester United
+Southampton lost to,1 to 2,Wolves
+Crystal Palace lost to,Burnley
+Man City beat,3 to 0,Spurs
+Brighton drew,0 to 0,Aston Villa
+Leicester beat,3 to 1,Liverpool
+Leeds beat,2 to 0,Crystal Palace
+Sheffield lost to,1 to 2,Chelsea
+Liverpool lost to,1 to 4,Manchester City
+Spurs beat,2 to 0,West Brom
+Wolves drew,0 to 0,Leicester
+Aston Villa beat,1 to 0,Arsenal
+Burnley drew,1 to 1,Brighton
+Newcastle beat,3 to 2,Southampton
+Fulham drew,0 to 0,West Ham
+Man United drew,3 to 3,Everton
+Burnley lost to,0 to 2,Manchester City
+Fulham lost to,0 to 0,Leicester
+Leeds lost to,1 to 2,Everton
+Aston Villa lost to,1 to 3,West Ham
+Liverpool lost to,0 to 1,Brighton
+Sheffield beat,2 to 1,West Brom
+Wolves beat,2 to 1,Arsenal
+Man United beat,9 to 0,Southhampton
+Newcastle lost to,1 to 2,Crystal Palace
+Chelsea beat,2 to 0,Burnley
+West Ham lost to,1 to 3,Liverpool
+Leicester lost to,1 to 3,Leeds
+Chelsea beat,2 to 0,Burnley
+Everton lost to,2 to 0,Newcastle
+Crystal Palace beat,1 to 0,Wolves
+Manchester City beat,1 to 0,Sheffield United
+West Brom drew,2 to 2,Fulham
+Everton lost to,2 to 0,Newcastle
+Tottenham lost to,0 to 1,Liverpool
+Burnley beat,3 to 2,Aston Villa
+Chelsea drew,0 to 0,Wolves
+Brighton drew,0 to 0,Fulham
+Everton drew,1 to 1,Leicester
+Manchester United lost to,1 to 2,Sheffield United
+Crystal Palace lost to,2 to 3,West Ham
+Newcastle lost to,1 to 2,Leeds
+Southampton lost to,1 to 3,Arsenal
+West Brom lost to,0 to 5 Manchester City
+Aston Villa beat,2 to 0,Newcastle
+Liverpool lost to,0 to 1,Burnley
+Fulham lost to,1 to 2,Manchester United
+Manchester City beat,2 to 0,Aston Villa
+Leicester beat,2 to 0,Chelsea
+Arsenal beat,3 to 0,Newcastle
+Manchester City beat,4 to 0,Crystal Palace
+Liverpool drew,0 to 0, Manchester United
+Sheffield lost to,1 to 3,Tottenham
+Leicester beat,2 to 0,Southampton
+Fulham lost to,0 to 1,Chelsea
+Wolves lost to,2 to 3,West Brom
+Arsenal drew,0 to 0,Crystal Palace
+Spurs drew,1 to 1,Fulham
+Manchester City beat,1 to 0,Brighton
+Sheffield beat,1 to 0,Newcastle
+Burnley lost to,0 to 1,Man United
+Wolves lost to,1 to 2,Everton
+Southampton beat,1 to 0,Liverpool
+Chelsea lost to,1 to 3,Manchester City
+Newcastle lost to,1 to 2,Leicester
+West Brom lost to,0 to 4,Arsenal
+Brighton drew,3 to 3,Wolves
+Crystal Palace beat,2 to 0,Sheffield
+Tottenham beat,3 to 0,Leeds
+Manchester United beat,2 to 1,Aston Villa
+Everton lost to,0 to 1,West Ham
+Newcastle drew,0 to 0,Liverpool
+Manchester United beat,1 to 0,Wolves
+Brighton lost to,0 to 1,Arsenal
+Burnley beat,1 to 0,Sheffield
+Southampton drew,0 to 0,West Ham
+West Brom lost to,0 to 5,Leeds
+Chelsea drew,1 to 1,Aston Villa
+Crystal Palace drew,1 to 1,Leicester
+Wolves drew,1 to 1,Spurs
+Liverpool drew,1 to 1,West Brom
+West ham drew,2 to 2,Brighton
+Leeds beat,1 to 0,Burnley
+Manchester City beat,2 to 0,Newcastle
+Sheffield United lost to,0 to 1,Everton
+Arsenal beat,3 to 1,Chelsea
+Aston Villa beat,3 to 0,Crystal Palace
+Fulham drew,0 to 0,Southampton
+Leicester drew,2 to 2,Manchester United
+Burnley beat,2 to 1,Wolves
+Chelsea beat,3 to 0,West Ham
+West Brom lost to,0 to 3,Aston Villa
+Manchester United beat,6 to 2,Leeds
+Spurs lost to,0 to 2,Leicester
+Brighton drew,1 to 1,Shefield
+Newcastle drew,1 to 1,Fulham
+Everton beat,2 to 1,Arsenal
+Southampton lost,0 to 1,Manchester City
+Crystal Palace lost to,0 to 7,Liverpool
+Sheffield lost to,2 to 3,Manchester United
+Aston Villa drew,0 to 0,Burnley
+Arsenal drew,1 to 1,Southampton
+Leeds beat,5 to 2,Newcastle
+Leicester lost to,0 to 2,Everton
+Fulham drew,0 to 0,Brighton
+Liverpool beat,2 to 1,Spurs
+West Ham drew,1 to 1,Crystal Palace
+Manchester City drew,1 to 1,West Brom
+Wolves beat,2 to 1,Chelsea
+Southampton beat,3 to 0,Sheffield Utd
+Crystal Palace drew,1 to 1,Spurs
+Fulham drew,1 to 1,Liverpool
+Arsenal lost to,0 to 1,Burnley
+Leicester beat,3 to 0,Brighton
+Wolves lost to,0 to 1,Aston Villa
+Newcastle beat,2 to 1,West Brom
+Man Utd drew,0 to 0,Man City
+Everton beat,1 to 0,Chelsea
+Leeds lost to,1 to 2,West Ham
+Brighton lost to,1 to 2,Southampton
+West Brom lost to,1 to 5,Crystal Palace
+Sheffield Utd lost to,1 to 2,Leicester
+Spurs beat,2 to 0,Arsenal
+Liverpool beat,4 to 0,Wolves
+Burnley drew,1 to 1,Everton
+Man City beat,2 to 0,Fulham
+West Ham lost to,1 to 3,Man Utd
+Chelsea beat,3 to 1,Leeds
+Leicester lost to,1 to 2,Fulham
+Leicester lost to,1 to 2,Fulham
+West Ham beat,2 to 1,Aston Villa
+Southampton lost to,2 to 3,Man Utd
+Chelsea drew,0 to 0,Spurs
+Arsenal lost to,1 to 2,Wolves
+Brighton drew,1 to 1,Liverpool
+Man City beat,5 to 0,Burnley
+Everton lost to,0 to 1,Leeds
+West Brom beat,1 to 0,Sheffield Utd
+Crystal Palace lost to,0 to 2,Newcastle
+Fulham lost to,2 to 3,Everton
+Sheffield Utd lost to,0 to 1,West Ham
+Leeds drew,0 to 0,Arsenal
+Liverpool beat,3 to 0,Leicester
+Newcastle lost to,0 to 2,Chelsea
+Aston Villa lost to,1 to 2,Brighton
+Spurs beat,2 to 0,Man City
+Man Utd beat,1 to 0,West Brom
+West Brom lost to,0 to 1,Spurs
+Leicester beat,1 to 0,Wolves
+Man City drew,1 to 1,Liverpool
+Arsenal lost to,0 to 3,Aston Villa
+Everton lost to,1 to 3,Man Utd
+Crystal Palace beat,4 to 1,Leeds
+Chelsea beat,4 to 1,Sheffield
+West Ham beat,1 to 0,Fulham
+Brighton drew,0 to 0,Burnley
+Southampton beat,2 to 0,Newcastle
+Fulham beat,2 to 0,West Brom
+Leeds lost to,1 to 4,Leicester
+Aston Villa lost to,3 to 4,Southampton
+Newcastle beat,2 to 1,Everton
+Man Utd lost to,0 to 1,Arsenal
+Spurs beat,2 to 1,Brighton
+Sheffield Utd lost to,0 to 1,Man City
+Burnley lost to,0 to 3,Chelsea
+Liverpool beat,2 to 1,West Ham
+wolves beat,2 to 1,West Ham
+Brighton drew,1 to 1,West Brom
+Burnley lost to,0 to 1,Spurs
+Southampton beat,2 to 0,Everton
+Wolves drew,1 to 1,Newcastle
+Arsenal lost to,0 to 1,Leicester
+West Ham drew,1 to 1,Man City
+Fulham lost to,1 to 2,Crystal Palace
+Man Utd drew,0 to 0,Chelsea
+Liverpool beat,2 to 1,Sheffield Utd
+Aston Villa lost to,0 to 3,Leeds
+West Brom drew,0 to 0,Burnley
+Leeds lost to,0 to 1,Wolves
+Sheffield Utd drew,1 to 1,Fulham
+Crystal Palace drew,1 to 1,Brighton
+Spurs drew,3 to 3,West Ham
+Leicester lost to,0 to 1,Aston Villa
+Everton drew,2 to 2,Liverpool
+Chelsea drew,3 to 3,Southampton
+Man City beat,1 to 0,Arsenal
+Newcastle lost to,1 to 4,Man Utd
+Aston Villa beat,7 to 2,Liverpool
+Leicester lost to,0 to 3,West Ham
+Southampton beat,2 to 0,West Brom
+Arsenal beat,2 to 1,Sheffield
+Wolves beat,1 to 0,Fulham
+Man United lost to,1 to 6,Spurs
+Newcastle beat,3 to 1,Burnley
+Leeds drew,1 to 1,Manchester City
+Everton beat,4 to 2,Brighton
+Chelsea beat,4 to 0,Crystal Palace
+Fulham lost to,0 to 3,Aston Villa
+Liverpool beat,3 to 1,Arsenal
+West Ham beat,4 to 0,Wolves
+Manchester City lost,2 to 5,Leicester
+Sheffield lost to,0 to 1,Leeds
+Spurs drew,1 to 1,Newcastle
+Burnley lost to,0 to 1,Southampton
+West Bromich Albion drew,3 to 3,Chelsea
+Brighton lost to,2 to 3,Manchester United
+Aston Villa beat,1 to 0,Sheffield
+Wolves lost to,1 to 3,Manchester City
+Leicester beat,4 to 2,Burnley
+Newcastle lost to,0 to 3,Brighton
+Chelsea lost to,0 to 2,Liverpool
+Southampton lost to,2 to 5,Spurs
+Man United lost to,1 to 3,Crystal Palace
+Leeds beat,4 to 3,Fulham
+Everton beat,5 to 2,West Brom
+Brighton lost to,1 to 3,Chelsea
+Sheffield lost to,0 to 2,Wolves
+Spurs lost to,0 to 1,Everton
+West Brom lost to,0 to 3,Leicester
+Fulham lost to,0 to 3,Arsenal
+Crystal Palace beat,1 to 0,Southampton
+Liverpool beat,4 to 3,Leeds
+West Ham lost to,0 to 2,Newcastle
+ , , 
+ , , 
+ , , 
+ , , 
+ , , 
+ , , 
+ , , 
+ , , 
+ , , 
+ , , 
+ , , 
+ , , 
+

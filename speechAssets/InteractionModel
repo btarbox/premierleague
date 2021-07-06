@@ -1,0 +1,611 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "premier league",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NoIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.YesIntent",
+                    "samples": []
+                },
+                {
+                    "name": "CleanSheetsIntent",
+                    "slots": [],
+                    "samples": [
+                        "clean sheets",
+                        "who has clean sheets",
+                        "which keepers got clean sheets",
+                        "which goal tenders have clean sheets"
+                    ]
+                },
+                {
+                    "name": "FixturesIntent",
+                    "slots": [],
+                    "samples": [
+                        "fixtures",
+                        "what are the upcoming matches",
+                        "what are the next fixtures",
+                        "who is playing next week",
+                        "who is playing this week",
+                        "current fixtures",
+                        "current match week"
+                    ]
+                },
+                {
+                    "name": "FoulsIntent",
+                    "slots": [],
+                    "samples": [
+                        "fouls",
+                        "who has the most fouls",
+                        "which players have the most fouls",
+                        "who has been called for the most fouls",
+                        "list fouls"
+                    ]
+                },
+                {
+                    "name": "GoldenBootIntent",
+                    "slots": [],
+                    "samples": [
+                        "golden boot",
+                        "most goals",
+                        "top scorers",
+                        "who has the most goals",
+                        "which players have the most goals"
+                    ]
+                },
+                {
+                    "name": "ListTeamNamesIntent",
+                    "slots": [],
+                    "samples": [
+                        "list team names",
+                        "what are the team names"
+                    ]
+                },
+                {
+                    "name": "RedCardIntent",
+                    "slots": [],
+                    "samples": [
+                        "red cards",
+                        "who has red cards",
+                        "which players got red cards"
+                    ]
+                },
+                {
+                    "name": "RefereesIntent",
+                    "slots": [],
+                    "samples": [
+                        "list referees",
+                        "who are the referees",
+                        "describe the referees",
+                        "referees",
+                        "which referees gave the most cards"
+                    ]
+                },
+                {
+                    "name": "RelegationIntent",
+                    "slots": [],
+                    "samples": [
+                        "relegation",
+                        "who is in the relegation zone",
+                        "which teams will be relegated",
+                        "list the bottom of the table"
+                    ]
+                },
+                {
+                    "name": "ResultsIntent",
+                    "slots": [],
+                    "samples": [
+                        "previous weeks fixtures",
+                        "scores",
+                        "results",
+                        "what were last weeks results",
+                        "how did teams do last week"
+                    ]
+                },
+                {
+                    "name": "StadiumIntent",
+                    "slots": [
+                        {
+                            "name": "stadiumType",
+                            "type": "stadiumType"
+                        }
+                    ],
+                    "samples": [
+                        "Tell me about {stadiumType}",
+                        "Describe {stadiumType}",
+                        "{stadiumType}"
+                    ]
+                },
+                {
+                    "name": "TableIntent",
+                    "slots": [],
+                    "samples": [
+                        "what is the table",
+                        "list the table",
+                        "show the table",
+                        "what are the standings",
+                        "table",
+                        "tell me the table",
+                        "give me the table",
+                        "the table"
+                    ]
+                },
+                {
+                    "name": "TacklesIntent",
+                    "slots": [],
+                    "samples": [
+                        "tackles",
+                        "who has the most tackles",
+                        "which players have the most tackles"
+                    ]
+                },
+                {
+                    "name": "TeamIntent",
+                    "slots": [
+                        {
+                            "name": "plteam",
+                            "type": "plTeam"
+                        }
+                    ],
+                    "samples": [
+                        "how did {plteam} do",
+                        "tell me about {plteam}",
+                        "describe {plteam}",
+                        "show {plteam}",
+                        "{plteam}"
+                    ]
+                },
+                {
+                    "name": "TouchesIntent",
+                    "slots": [],
+                    "samples": [
+                        "touches",
+                        "who has the most touches",
+                        "which players have the most touches",
+                        "list touches"
+                    ]
+                },
+                {
+                    "name": "YellowCardIntent",
+                    "slots": [],
+                    "samples": [
+                        "yellow cards",
+                        "who has yellow cards",
+                        "which players got yellow cards"
+                    ]
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                }
+            ],
+            "types": [
+                {
+                    "name": "plTeam",
+                    "values": [
+                        {
+                            "id": "Brentford",
+                            "name": {
+                                "value": "Brentford",
+                                "synonyms": [
+                                    "The Bees"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "Watford",
+                            "name": {
+                                "value": "Watford",
+                                "synonyms": [
+                                    "The Hornets"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "NorwichCity",
+                            "name": {
+                                "value": "Norwich City",
+                                "synonyms": [
+                                    "Canaries"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "ManchesterUnited",
+                            "name": {
+                                "value": "Manchester United",
+                                "synonyms": [
+                                    "man you"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "ManchesterCity",
+                            "name": {
+                                "value": "Manchester City",
+                                "synonyms": [
+                                    "citizens"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "AstonVilla",
+                            "name": {
+                                "value": "Aston Villa",
+                                "synonyms": [
+                                    "lions",
+                                    "the villa",
+                                    "villans"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "Burnley",
+                            "name": {
+                                "value": "Burnley",
+                                "synonyms": [
+                                    "clarets"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "Everton",
+                            "name": {
+                                "value": "Everton",
+                                "synonyms": [
+                                    "toffees"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "Fulham",
+                            "name": {
+                                "value": "Fulham",
+                                "synonyms": [
+                                    "cottagers",
+                                    "the cottagers"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "Liverpool",
+                            "name": {
+                                "value": "Liverpool",
+                                "synonyms": [
+                                    "the reds",
+                                    "Red Devils"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "WestBromwichAlbion",
+                            "name": {
+                                "value": "West Bromwich Albion",
+                                "synonyms": [
+                                    "The baggies",
+                                    "baggies",
+                                    "west brom"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "Southhampton",
+                            "name": {
+                                "value": "Southhampton",
+                                "synonyms": [
+                                    "saints"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "SheffieldUnited",
+                            "name": {
+                                "value": "Sheffield United",
+                                "synonyms": [
+                                    "blades",
+                                    "The blades"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "BrightonAndHoveAlbion",
+                            "name": {
+                                "value": "Brighton and Hove Albion",
+                                "synonyms": [
+                                    "Brighton"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "NewcastleUnited",
+                            "name": {
+                                "value": "Newcastle United",
+                                "synonyms": [
+                                    "magpies",
+                                    "newcastle"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "TottenhamHotspur",
+                            "name": {
+                                "value": "Tottenham Hotspur",
+                                "synonyms": [
+                                    "spurs",
+                                    "hotspurs",
+                                    "tottenham",
+                                    "tottenham hotspurs"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "WestHamUnited",
+                            "name": {
+                                "value": "West Ham United",
+                                "synonyms": [
+                                    "West Ham",
+                                    "Hammers",
+                                    "the hammers"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "LeicesterCity",
+                            "name": {
+                                "value": "Leicester City",
+                                "synonyms": [
+                                    "foxes",
+                                    "Leicester",
+                                    "the foxes"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "Chelsea",
+                            "name": {
+                                "value": "Chelsea",
+                                "synonyms": [
+                                    "the blues"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "LeedsUnited",
+                            "name": {
+                                "value": "Leeds United",
+                                "synonyms": [
+                                    "The peacocks",
+                                    "peacocks"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "WolverhamptonWanderers",
+                            "name": {
+                                "value": "Wolverhampton Wanderers",
+                                "synonyms": [
+                                    "Wolverhampton",
+                                    "Wanderers",
+                                    "the Wanderers",
+                                    "wolves"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "CrystalPalace",
+                            "name": {
+                                "value": "Crystal Palace",
+                                "synonyms": [
+                                    "palace"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "Arsenal",
+                            "name": {
+                                "value": "Arsenal",
+                                "synonyms": [
+                                    "gunners"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "stadiumType",
+                    "values": [
+                        {
+                            "id": "Amex",
+                            "name": {
+                                "value": "Amex",
+                                "synonyms": [
+                                    "Amex Stadium"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "Anfield",
+                            "name": {
+                                "value": "Anfield",
+                                "synonyms": [
+                                    "Anfield Stadium"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "Bet365",
+                            "name": {
+                                "value": "Bet365",
+                                "synonyms": [
+                                    "Bet365 Stadium",
+                                    "bet 3 sixty five",
+                                    "bet three six five stadium",
+                                    "bet three sixty five stadium"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "DeanCourt",
+                            "name": {
+                                "value": "DeanCourt",
+                                "synonyms": [
+                                    "Dean Court Stadium",
+                                    "Vitality Stadium"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "Emirates",
+                            "name": {
+                                "value": "Emirates",
+                                "synonyms": [
+                                    "The Emirates",
+                                    "Emirates Stadium"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "Etihad",
+                            "name": {
+                                "value": "Etihad",
+                                "synonyms": [
+                                    "The Etihad",
+                                    "The etihad stadium"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "GoodisonPark",
+                            "name": {
+                                "value": "GoodisonPark",
+                                "synonyms": [
+                                    "Goodison Park Stadium"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "JohnSmith",
+                            "name": {
+                                "value": "JohnSmith",
+                                "synonyms": [
+                                    "John Smith Stadium",
+                                    "Kirkless",
+                                    "Kirkless Stadium"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "KingPower",
+                            "name": {
+                                "value": "KingPower",
+                                "synonyms": [
+                                    "King Power Stadium"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "LibertyStadium",
+                            "name": {
+                                "value": "LibertyStadium"
+                            }
+                        },
+                        {
+                            "id": "LondonStadium",
+                            "name": {
+                                "value": "LondonStadium"
+                            }
+                        },
+                        {
+                            "id": "OldTrafford",
+                            "name": {
+                                "value": "OldTrafford",
+                                "synonyms": [
+                                    "Old Trafford Stadium"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "SaintJamesPark",
+                            "name": {
+                                "value": "SaintJamesPark"
+                            }
+                        },
+                        {
+                            "id": "SelhurstPark",
+                            "name": {
+                                "value": "SelhurstPark",
+                                "synonyms": [
+                                    "Selhurst Park Stadium"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "StMarys",
+                            "name": {
+                                "value": "StMarys",
+                                "synonyms": [
+                                    "Saint Marys",
+                                    "Saint Marys Stadium"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "StamfordBridge",
+                            "name": {
+                                "value": "StamfordBridge"
+                            }
+                        },
+                        {
+                            "id": "TheHawthorns",
+                            "name": {
+                                "value": "TheHawthorns"
+                            }
+                        },
+                        {
+                            "id": "TurfMoor",
+                            "name": {
+                                "value": "TurfMoor",
+                                "synonyms": [
+                                    "Turf Moor Stadum"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "VicarageRoad",
+                            "name": {
+                                "value": "VicarageRoad",
+                                "synonyms": [
+                                    "Vicarage Road Stadium"
+                                ]
+                            }
+                        },
+                        {
+                            "id": "WembleyStadium",
+                            "name": {
+                                "value": "Wembley",
+                                "synonyms": [
+                                    "White Hart Lane"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

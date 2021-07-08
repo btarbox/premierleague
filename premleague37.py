@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
 Python 3.7 version of PremierLeague.
-TODO:
-add Fixtures and/or results by team_name (deal with shortened names in files vs canonical names)
+TODO: 
+add Fixtures by team_name (deal with shortened names in files vs canonical names)
 add team sounds
 """
 
@@ -310,7 +310,7 @@ class TeamHandler(AbstractRequestHandler):
             this_team_index = find_team_index(team_id)
             if this_team_index == -1:
                 logger.info("could not find team")
-                speech = "could not find team"
+                speech = "count not find team"
                 card_text = speech
             else:
                 speech = "You asked about " + team_name + ", their form is "
@@ -443,11 +443,12 @@ class FixturesHandler(AbstractRequestHandler):
         session_attr["fixture_index"] = 5
         handler_input.attributes_manager.session_attributes = session_attr
         
-        speech, card_text = load_stats_ng(5, "fixtures2", " versus ", " ", "  ", 0, 2, -1)
+        speech, card_text = load_stats_ng(5, "fixtures2", " versus ", " ", "  ", 0, 2, -1, "")
         speech = intro + speech + ' Would you like to hear more?'
         
         handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Fixtures", card_text))
         return handler_input.response_builder.response
+
 
 class ResultsHandler(AbstractRequestHandler):
     """Handler for ResultsIntent."""
@@ -468,12 +469,42 @@ class ResultsHandler(AbstractRequestHandler):
         session_attr["results_index"] = 5
         handler_input.attributes_manager.session_attributes = session_attr
         
-        speech, card_text = load_stats_ng(5, "prevWeekFixtures", "  ", "  ", "  ", 0, 2, 1)
+        speech, card_text = load_stats_ng(5, "prevWeekFixtures", "  ", "  ", "  ", 0, 2, 1, "")
         speech = intro + speech + ',' + ' Would you like to hear more?'
         
         handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Results", card_text))
         return handler_input.response_builder.response
 
+
+class TeamResultsHandler(AbstractRequestHandler):
+    """Handler for TeamResultsIntent."""
+
+    def can_handle(self, handler_input):
+        logger.info("in can_handle TeamResultsHandler")
+        return (is_intent_name("TeamResultsIntent")(handler_input))
+
+    def handle(self, handler_input):
+        logger.info("In TeamResultsHandler")
+        if "results" in extra_cmd_prompts:
+            del extra_cmd_prompts["results"]
+            
+        slot = get_slot(handler_input, "plteam")
+        dict = slot.resolutions.to_dict()
+        success = dict['resolutions_per_authority'][0]["status"]["code"]
+        if success == 'ER_SUCCESS_MATCH':
+            team_id = dict['resolutions_per_authority'][0]["values"][0]["value"]["id"]
+            team_name = dict['resolutions_per_authority'][0]["values"][0]["value"]["name"]
+    
+        logger.info(f"asked about {team_name}")
+        intro = f"recent results for {team_name} were"
+        session_attr = handler_input.attributes_manager.session_attributes
+        handler_input.attributes_manager.session_attributes = session_attr
+        
+        speech, card_text = load_stats_ng(5, "prevWeekFixtures", "  ", "  ", "  ", 0, 2, 1, team_name)
+        speech = intro + speech + ',' + random_prompt()
+        
+        handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Results", card_text))
+        return handler_input.response_builder.response
 
 
 class YesHandler(AbstractRequestHandler):
@@ -510,7 +541,7 @@ class YesHandler(AbstractRequestHandler):
             fixture_index = session_attr.get("fixture_index", 0)
             session_attr["fixture_index"] = fixture_index + 5
             handler_input.attributes_manager.session_attributes = session_attr
-            speech, card_text = load_stats_ng(5, "fixtures2", " versus ", " ", "  ", 0, 2, -1, fixture_index)
+            speech, card_text = load_stats_ng(5, "fixtures2", " versus ", " ", "  ", 0, 2, -1, "", fixture_index)
             speech = intro + speech + ' Would you like to hear more?'
             handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Premier League", card_text))
             return handler_input.response_builder.response
@@ -519,7 +550,7 @@ class YesHandler(AbstractRequestHandler):
             results_index = session_attr.get("results_index", 0)
             session_attr["results_index"] = results_index + 5
             handler_input.attributes_manager.session_attributes = session_attr
-            speech, card_text = load_stats_ng(5, "prevWeekFixtures", "  ", "  ", "  ", 0, 2, 1, results_index)
+            speech, card_text = load_stats_ng(5, "prevWeekFixtures", "  ", "  ", "  ", 0, 2, 1, "", results_index)
             speech = intro + speech + ' Would you like to hear more?'
             handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Premier League", card_text))
             return handler_input.response_builder.response
@@ -667,6 +698,7 @@ sb.add_request_handler(RedCardHandler())
 sb.add_request_handler(YellowCardHandler())
 sb.add_request_handler(FixturesHandler())
 sb.add_request_handler(ResultsHandler())
+sb.add_request_handler(TeamResultsHandler())
 
 # Register exception handlers
 sb.add_exception_handler(CatchAllExceptionHandler())
@@ -715,18 +747,19 @@ def pluralize(count, noun, ess):
         return count + " " + noun + ess
 
 def load_suggestions():
-    extra_cmd_prompts["touches"] = ". you can also ask about touches"
-    extra_cmd_prompts["fouls"] = ". you can also ask about fouls"
-    extra_cmd_prompts["tackles"] = ". you can also ask about tackles"
-    extra_cmd_prompts["stadiums"] = ". you can also ask about Premier League stadiums by name"
-    extra_cmd_prompts["referees"] = ". you can also ask about referees"
-    extra_cmd_prompts["fixtures"] = ". you can also ask about fixtures"
-    extra_cmd_prompts["results"] = ". you can also ask about last weeks results"
-    extra_cmd_prompts["relegation"] = ". you can also ask about relegation"
-    extra_cmd_prompts["redcards"] = ". you can also say red cards"
+    extra_cmd_prompts["touches"]     = ". you can also ask about touches"
+    extra_cmd_prompts["fouls"]       = ". you can also ask about fouls"
+    extra_cmd_prompts["tackles"]     = ". you can also ask about tackles"
+    extra_cmd_prompts["stadiums"]    = ". you can also ask about Premier League stadiums by name"
+    extra_cmd_prompts["referees"]    = ". you can also ask about referees"
+    extra_cmd_prompts["fixtures"]    = ". you can also ask about fixtures"
+    extra_cmd_prompts["results"]     = ". you can also ask about last weeks results"
+    extra_cmd_prompts["relegation"]  = ". you can also ask about relegation"
+    extra_cmd_prompts["redcards"]    = ". you can also say red cards"
     extra_cmd_prompts["yellowcards"] = ". you can also say yellow card"
     extra_cmd_prompts["cleansheets"] = ".  you can also ask about clean sheets"
-    extra_cmd_prompts["goals"] = ". you can also ask about goals"
+    extra_cmd_prompts["goals"]       = ". you can also ask about goals"
+    extra_cmd_prompts["teamresults"] = ". you can also say, how has my team done recently"
 
 
 def suggest():
@@ -862,7 +895,7 @@ def strip_emotions(str):
         return str
 
     
-def load_stats_ng(number, filename, article1, article2, article3, firstCol, secondCol, thirdCol, lines_to_skip=0):
+def load_stats_ng(number, filename, article1, article2, article3, firstCol, secondCol, thirdCol, team_to_match, lines_to_skip=0):
     say = ""
     card_text = ""
     s3 = boto3.client("s3")
@@ -900,10 +933,32 @@ def load_stats_ng(number, filename, article1, article2, article3, firstCol, seco
         else:
             third = oneCard[thirdCol] if thirdCol > -1 else ""
             new_text = get_one_line(oneCard[firstCol], article1, oneCard[secondCol], article2, third, article3)
-            say = say + ", " + new_text
-            card_text = card_text + new_text + "\n"
+            if team_matches(team_to_match, new_text):
+                say = say + ", " + new_text
+                card_text = card_text + new_text + "\n"
+            else:
+                date_lines += 1
         index += 1
     return (say, strip_emotions(card_text))            
+
+
+''' Accept a cannonical name from Speech Model such as "tottenhamhotspurs" , convert to name as in text files and look for a match'''
+def team_matches(team_name, text_to_search):
+    logger.info(f"team_matches {team_name} {text_to_search}")
+    if team_name == "":
+        return True
+    cannonical_names = {
+        #"as appears in table" : "as appears in results"
+        "Arsenal"           : "Arsenal",
+        "Brentford"         : "Brentford",
+        "Manchester United" : "Man United",
+        "Manchester City"   : "Man City"
+        "Tottenham Hotspur" : "Spurs", 
+        "Watford"           : "Watford"
+    }
+    name_to_look_for = cannonical_names.get(team_name, "not found")
+    logger.info(f"name to look for {name_to_look_for} in {text_to_search}")
+    return text_to_search.find(name_to_look_for) != -1
 
     
 def load_stats(number, filename, article1, article2, article3, firstCol, secondCol, thirdCol):

@@ -2,10 +2,13 @@
 """
 Python 3.7 version of PremierLeague.
 TODO: 
-add Fixtures by team_name (deal with shortened names in files vs canonical names)
+full regression test
+split source code into multiple files
 add team sounds
+copy india voice model to other models
 """
-
+#from utility import foo, GoalsHandler
+import shared
 import random
 import logging
 import pprint
@@ -25,6 +28,9 @@ from ask_sdk_core.handler_input import HandlerInput
 from ask_sdk_model.ui import SimpleCard, StandardCard, Image
 from ask_sdk_model import Response
 
+from statshandlers import bla
+from shared import extra_cmd_prompts
+from statshandlers import load_suggestions, suggest, strip_emotions, get_excitement_prefix, get_excitement_suffix
 
 SKILL_NAME = "PremierLeague"
 HELP_MESSAGE = "Say get table, a team name or nickname, red cards, yellow cards, clean sheets, golden boot, fixtures, results, relegation, referees, stadiums by name, touches, fouls and tackles"
@@ -55,7 +61,11 @@ class WelcomeHandler(AbstractRequestHandler):
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         logger.info("In WelcomeHandler")
+        logger.info("test: " + shared.this_is_shared)
+        bla()
         load_suggestions()
+        suggest()
+        del extra_cmd_prompts["referees"]
         #load_main_table()
         reload_main_table_as_needed()
         logger.info("first place is {} and last place is {}".format(table_data[0][0], table_data[19][0]))
@@ -752,7 +762,7 @@ GOALS_FOR_INDEX = 5
 GOALS_AGAINST_INDEX = 6
 GOAL_DIFF_INDEX = 7
 POINTS_INDEX = 8
-extra_cmd_prompts = {}
+#extra_cmd_prompts = {}
 
 
 def find_team_index(team_id):
@@ -776,37 +786,37 @@ def pluralize(count, noun, ess):
         return count + " " + noun
     else:
         return count + " " + noun + ess
+        
+# def load_suggestions():
+#     extra_cmd_prompts["touches"]      = ". you can also ask about touches"
+#     extra_cmd_prompts["fouls"]        = ". you can also ask about fouls"
+#     extra_cmd_prompts["tackles"]      = ". you can also ask about tackles"
+#     extra_cmd_prompts["stadiums"]     = ". you can also ask about Premier League stadiums by name"
+#     extra_cmd_prompts["referees"]     = ". you can also ask about referees"
+#     extra_cmd_prompts["fixtures"]     = ". you can also ask about fixtures"
+#     extra_cmd_prompts["results"]      = ". you can also ask about last weeks results"
+#     extra_cmd_prompts["teamfixtures"] = ". you can also ask about fixtures for a team"
+#     extra_cmd_prompts["teamresults"]  = ". you can also ask about results for a team"
+#     extra_cmd_prompts["relegation"]   = ". you can also ask about relegation"
+#     extra_cmd_prompts["redcards"]     = ". you can also say red cards"
+#     extra_cmd_prompts["yellowcards"]  = ". you can also say yellow card"
+#     extra_cmd_prompts["cleansheets"]  = ". you can also ask about clean sheets"
+#     extra_cmd_prompts["goals"]        = ". you can also ask about goals"
+#     extra_cmd_prompts["teamresults"]  = ". you can also say, how has my team done recently"
 
-def load_suggestions():
-    extra_cmd_prompts["touches"]      = ". you can also ask about touches"
-    extra_cmd_prompts["fouls"]        = ". you can also ask about fouls"
-    extra_cmd_prompts["tackles"]      = ". you can also ask about tackles"
-    extra_cmd_prompts["stadiums"]     = ". you can also ask about Premier League stadiums by name"
-    extra_cmd_prompts["referees"]     = ". you can also ask about referees"
-    extra_cmd_prompts["fixtures"]     = ". you can also ask about fixtures"
-    extra_cmd_prompts["results"]      = ". you can also ask about last weeks results"
-    extra_cmd_prompts["teamfixtures"] = ". you can also ask about fixtures for a team"
-    extra_cmd_prompts["teamresults"]  = ". you can also ask about results for a team"
-    extra_cmd_prompts["relegation"]   = ". you can also ask about relegation"
-    extra_cmd_prompts["redcards"]     = ". you can also say red cards"
-    extra_cmd_prompts["yellowcards"]  = ". you can also say yellow card"
-    extra_cmd_prompts["cleansheets"]  = ". you can also ask about clean sheets"
-    extra_cmd_prompts["goals"]        = ". you can also ask about goals"
-    extra_cmd_prompts["teamresults"]  = ". you can also say, how has my team done recently"
 
-
-def suggest():
-    suggestions_left = len(extra_cmd_prompts)
-    logger.info("There are {} suggestions remaining".format(suggestions_left))
-    sugs = " "
-    if suggestions_left > 0:
-        key,value = random.choice(list(extra_cmd_prompts.items()))
-        #del extra_cmd_prompts[key]
-        logger.info("suggesting " + value)
-        return value
-    else:
-        load_suggestions()    
-    return ""
+# def suggest():
+#     suggestions_left = len(extra_cmd_prompts)
+#     logger.info("There are {} suggestions remaining".format(suggestions_left))
+#     sugs = " "
+#     if suggestions_left > 0:
+#         key,value = random.choice(list(extra_cmd_prompts.items()))
+#         #del extra_cmd_prompts[key]
+#         logger.info("suggesting " + value)
+#         return value
+#     else:
+#         load_suggestions()    
+#     return ""
 
     
 def build_table_fragment(table_index):
@@ -833,24 +843,24 @@ def build_relegation_fragment():
     return '<amazon:emotion name="disappointed" intensity="high">' + relegation_fragment + '</amazon:emotion>'
     
 
-def get_excitement_prefix(index):
-    ''' speak with excitement or disappointment but with some randomness '''
+# def get_excitement_prefix(index):
+#     ''' speak with excitement or disappointment but with some randomness '''
     
-    high_or_medium = "high" if randrange(0,2)==0 else "medium"
-    medium_or_low = "medium" if randrange(0,2)==0 else "low"
+#     high_or_medium = "high" if randrange(0,2)==0 else "medium"
+#     medium_or_low = "medium" if randrange(0,2)==0 else "low"
     
-    if index < 5:
-        return '<amazon:emotion name="excited" intensity="{}">'.format(high_or_medium)
-    elif index < 10:
-        return '<amazon:emotion name="excited" intensity="{}">'.format(medium_or_low)
-    elif index < 15:
-        return '<amazon:emotion name="disappointed" intensity="{}">'.format(medium_or_low)
-    else:
-        return '<amazon:emotion name="disappointed" intensity="high">'.format(high_or_medium)
+#     if index < 5:
+#         return '<amazon:emotion name="excited" intensity="{}">'.format(high_or_medium)
+#     elif index < 10:
+#         return '<amazon:emotion name="excited" intensity="{}">'.format(medium_or_low)
+#     elif index < 15:
+#         return '<amazon:emotion name="disappointed" intensity="{}">'.format(medium_or_low)
+#     else:
+#         return '<amazon:emotion name="disappointed" intensity="high">'.format(high_or_medium)
         
         
-def get_excitement_suffix():
-    return '</amazon:emotion>'
+# def get_excitement_suffix():
+#     return '</amazon:emotion>'
 
         
 def say_place(table_index):
@@ -918,14 +928,14 @@ def get_one_line(noun1, article1, noun2, article2, noun3, article3):
         return noun1 + article1 + noun2 + article2 + noun3 + article3 + ","
 
 
-def strip_emotions(str):
-    try:
-        index = str.index("<")
-        index2 = str.index(">")
-        str2 = str[:index] + str[index2+1:]
-        return str2.replace("</amazon:emotion>","")
-    except:
-        return str
+# def strip_emotions(str):
+#     try:
+#         index = str.index("<")
+#         index2 = str.index(">")
+#         str2 = str[:index] + str[index2+1:]
+#         return str2.replace("</amazon:emotion>","")
+#     except:
+#         return str
 
     
 def load_stats_ng(number, filename, article1, article2, article3, firstCol, secondCol, thirdCol, team_to_match, lines_to_skip=0):
@@ -988,11 +998,23 @@ def team_matches(team_name, text_to_search):
     cannonical_names = {
         #"as appears in table" : "as appears in results"
         "Arsenal"           : "Arsenal",
+        "Aston Villa"       : "Aston Villa",
+        "Burnley"           : "Burnley",
         "Brentford"         : "Brentford",
+        "Brighton and Hove Albion" : "Brighton",
+        "Chelsea"           : "Chelsea",
+        "Everton"           : "Everton",
+        "Leeds United"      : "Leeds",
+        "Leicester City"    : "Leicester",
+        "Liverpool"         : "Liverpool",
         "Manchester United" : "Man United",
         "Manchester City"   : "Man City",
+        "Newcastle United"  : "Newcastle",
+        "Norwich City"      : "Norwich",
+        "Southampton"       : "Southampton",
         "Tottenham Hotspur" : "Spurs", 
-        "Watford"           : "Watford"
+        "Watford"           : "Watford",
+        "West Ham United"   : "West Ham"
     }
     name_to_look_for = cannonical_names.get(team_name, "not found")
     match_index = text_to_search.find(name_to_look_for)

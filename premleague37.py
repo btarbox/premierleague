@@ -380,7 +380,6 @@ class StadiumHandler(AbstractRequestHandler):
         return handler_input.response_builder.response
 
 
-
 class RelegationHandler(AbstractRequestHandler):
     """Handler for RelegationIntent."""
 
@@ -485,8 +484,8 @@ class TeamResultsHandler(AbstractRequestHandler):
 
     def handle(self, handler_input):
         logger.info("In TeamResultsHandler")
-        if "results" in extra_cmd_prompts:
-            del extra_cmd_prompts["results"]
+        if "teamresults" in extra_cmd_prompts:
+            del extra_cmd_prompts["teamresults"]
             
         slot = get_slot(handler_input, "plteam")
         dict = slot.resolutions.to_dict()
@@ -504,6 +503,37 @@ class TeamResultsHandler(AbstractRequestHandler):
         speech = intro + speech + ',' + random_prompt()
         
         handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Results", card_text))
+        return handler_input.response_builder.response
+
+class TeamFixturesHandler(AbstractRequestHandler):
+    """Handler for TeamFixturesIntent."""
+
+    def can_handle(self, handler_input):
+        logger.info("in can_handle TeamFixturesHandler")
+        return (is_intent_name("TeamFixturesIntent")(handler_input))
+
+    def handle(self, handler_input):
+        logger.info("In TeamFixturesHandler")
+        if "teamfixtures" in extra_cmd_prompts:
+            del extra_cmd_prompts["teamfixtures"]
+            
+        slot = get_slot(handler_input, "plteam")
+        dict = slot.resolutions.to_dict()
+        success = dict['resolutions_per_authority'][0]["status"]["code"]
+        if success == 'ER_SUCCESS_MATCH':
+            team_id = dict['resolutions_per_authority'][0]["values"][0]["value"]["id"]
+            team_name = dict['resolutions_per_authority'][0]["values"][0]["value"]["name"]
+    
+        logger.info(f"asked about {team_name}")
+        intro = f"upcoming fixtures for {team_name} are"
+        session_attr = handler_input.attributes_manager.session_attributes
+        handler_input.attributes_manager.session_attributes = session_attr
+        
+        #speech, card_text = load_stats_ng(5, "fixtures2", "  ", "  ", "  ", 0, 2, 1, team_name)
+        speech, card_text = load_stats_ng(5, "fixtures2", " versus ", " ", "  ", 0, 2, -1, team_name)
+        speech = intro + speech + ',' + random_prompt()
+        
+        handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Fixtures", card_text))
         return handler_input.response_builder.response
 
 
@@ -699,6 +729,7 @@ sb.add_request_handler(YellowCardHandler())
 sb.add_request_handler(FixturesHandler())
 sb.add_request_handler(ResultsHandler())
 sb.add_request_handler(TeamResultsHandler())
+sb.add_request_handler(TeamFixturesHandler())
 
 # Register exception handlers
 sb.add_exception_handler(CatchAllExceptionHandler())
@@ -747,19 +778,21 @@ def pluralize(count, noun, ess):
         return count + " " + noun + ess
 
 def load_suggestions():
-    extra_cmd_prompts["touches"]     = ". you can also ask about touches"
-    extra_cmd_prompts["fouls"]       = ". you can also ask about fouls"
-    extra_cmd_prompts["tackles"]     = ". you can also ask about tackles"
-    extra_cmd_prompts["stadiums"]    = ". you can also ask about Premier League stadiums by name"
-    extra_cmd_prompts["referees"]    = ". you can also ask about referees"
-    extra_cmd_prompts["fixtures"]    = ". you can also ask about fixtures"
-    extra_cmd_prompts["results"]     = ". you can also ask about last weeks results"
-    extra_cmd_prompts["relegation"]  = ". you can also ask about relegation"
-    extra_cmd_prompts["redcards"]    = ". you can also say red cards"
-    extra_cmd_prompts["yellowcards"] = ". you can also say yellow card"
-    extra_cmd_prompts["cleansheets"] = ".  you can also ask about clean sheets"
-    extra_cmd_prompts["goals"]       = ". you can also ask about goals"
-    extra_cmd_prompts["teamresults"] = ". you can also say, how has my team done recently"
+    extra_cmd_prompts["touches"]      = ". you can also ask about touches"
+    extra_cmd_prompts["fouls"]        = ". you can also ask about fouls"
+    extra_cmd_prompts["tackles"]      = ". you can also ask about tackles"
+    extra_cmd_prompts["stadiums"]     = ". you can also ask about Premier League stadiums by name"
+    extra_cmd_prompts["referees"]     = ". you can also ask about referees"
+    extra_cmd_prompts["fixtures"]     = ". you can also ask about fixtures"
+    extra_cmd_prompts["results"]      = ". you can also ask about last weeks results"
+    extra_cmd_prompts["teamfixtures"] = ". you can also ask about fixtures for a team"
+    extra_cmd_prompts["teamresults"]  = ". you can also ask about results for a team"
+    extra_cmd_prompts["relegation"]   = ". you can also ask about relegation"
+    extra_cmd_prompts["redcards"]     = ". you can also say red cards"
+    extra_cmd_prompts["yellowcards"]  = ". you can also say yellow card"
+    extra_cmd_prompts["cleansheets"]  = ". you can also ask about clean sheets"
+    extra_cmd_prompts["goals"]        = ". you can also ask about goals"
+    extra_cmd_prompts["teamresults"]  = ". you can also say, how has my team done recently"
 
 
 def suggest():
@@ -924,11 +957,15 @@ def load_stats_ng(number, filename, article1, article2, article3, firstCol, seco
             skip_index += 1
             logger.info("we have seen one of the lines to skip")
 
-    logger.info(f"index: {index} number:{number} date_lines: {date_lines} lines_to_skip: {lines_to_skip}")        
+    logger.info(f"index: {index} number:{number} date_lines: {date_lines} lines_to_skip: {lines_to_skip}")
+    last_line_was_a_date = False
+    
     while (index < (number + date_lines + lines_to_skip)) and (index < lines_in_file):
         oneCard = n[index].split(',')
         if oneCard[0] == 'date':
-            say += ' ' + oneCard[1] + ' '
+            if last_line_was_a_date == False:
+                say += ' ' + oneCard[1] + ' '
+                last_line_was_a_date = True
             date_lines += 1;
         else:
             third = oneCard[thirdCol] if thirdCol > -1 else ""
@@ -936,6 +973,7 @@ def load_stats_ng(number, filename, article1, article2, article3, firstCol, seco
             if team_matches(team_to_match, new_text):
                 say = say + ", " + new_text
                 card_text = card_text + new_text + "\n"
+                last_line_was_a_date = False
             else:
                 date_lines += 1
         index += 1
@@ -952,13 +990,17 @@ def team_matches(team_name, text_to_search):
         "Arsenal"           : "Arsenal",
         "Brentford"         : "Brentford",
         "Manchester United" : "Man United",
-        "Manchester City"   : "Man City"
+        "Manchester City"   : "Man City",
         "Tottenham Hotspur" : "Spurs", 
         "Watford"           : "Watford"
     }
     name_to_look_for = cannonical_names.get(team_name, "not found")
-    logger.info(f"name to look for {name_to_look_for} in {text_to_search}")
-    return text_to_search.find(name_to_look_for) != -1
+    match_index = text_to_search.find(name_to_look_for)
+    if match_index == -1:
+        logger.info(f"{name_to_look_for} not found in {text_to_search}")
+    else:
+        logger.info(f"{name_to_look_for} FOUND in {text_to_search}")
+    return match_index != -1
 
     
 def load_stats(number, filename, article1, article2, article3, firstCol, secondCol, thirdCol):

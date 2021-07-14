@@ -11,11 +11,12 @@ from ask_sdk_core.dispatch_components import (
 from ask_sdk_core.utils import is_request_type, is_intent_name, get_supported_interfaces
 from ask_sdk_core.handler_input import HandlerInput
 from ask_sdk_core.utils import get_supported_interfaces
-from ask_sdk_model.ui import SimpleCard
+from ask_sdk_model.ui import SimpleCard,StandardCard, Image
 from ask_sdk_model import Response
 #from ask_sdk_model.interfaces.alexa.presentation.apl import (RenderDocumentDirective)
 from ask_sdk_model.interfaces.alexa.presentation.apla import RenderDocumentDirective
 import json
+from random import randrange
 
 
 sb = SkillBuilder()
@@ -71,10 +72,13 @@ class LaunchRequestHandler(AbstractRequestHandler):
         # )
         #if get_supported_interfaces(handler_input).alexa_presentation_apl is not None:
         logger.info("about to return response")
+        image_url = "https://duy7y3nglgmh.cloudfront.net/Depositphotos_referee.jpg"
+        card = StandardCard(title="Premier League", text="bla", image=Image(small_image_url=image_url, large_image_url=image_url))
+        
         return(
         handler_input.response_builder
           #.speak("this is the speak")
-          .ask("this is the ask")
+          .ask("this is the ask").set_card(card)
           .add_directive( 
               RenderDocumentDirective(
                 token= "developer-provided-string",
@@ -84,8 +88,12 @@ class LaunchRequestHandler(AbstractRequestHandler):
                 },
                 datasources = {
                     "user": {
-                      "name": "Brian Guthrie Tarbox"
-                      }
+                      "name": "You asked about Liverpool, <amazon:emotion name=\"excited\" intensity=\"medium\">their form is third place with 20 wins, 9  draws, 9  losses, 68  goals scored, 42  goals allowed,  for a goal difference of +26, and 69  points, </amazon:emotion>Say get table, or say a team name"
+                      },
+                    "crowd": {
+                        "noise": "https://btbscratch.s3.amazonaws.com/FootballCrowdSound.mp3",
+                        "start": str(randrange(0, 50*60))
+                    }
                 }              
             )
             ).response

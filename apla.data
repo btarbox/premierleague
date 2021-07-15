@@ -1,0 +1,10 @@
+{
+    "note": "This DATA is for use in the authoring tool only. To use data at runtime, please follow the instructions here: https://developer.amazon.com/en-US/docs/alexa/alexa-presentation-language/apla-data-source.html",
+    "user": {
+        "name": "You asked about Liverpool, <amazon:emotion name=\"excited\" intensity=\"medium\">their form is third place with 20 wins, 9  draws, 9  losses, 68  goals scored, 42  goals allowed,  for a goal difference of +26, and 69  points, </amazon:emotion>Say get table, or say a team name"
+    },
+    "crowd": {
+        "noise": "https://btbscratch.s3.amazonaws.com/FootballCrowdSound.mp3",
+        "start": 1000
+    }
+}

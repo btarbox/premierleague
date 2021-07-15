@@ -27,10 +27,11 @@ from ask_sdk_core.handler_input import HandlerInput
 
 from ask_sdk_model.ui import SimpleCard, StandardCard, Image
 from ask_sdk_model import Response
+from ask_sdk_model.interfaces.alexa.presentation.apla import RenderDocumentDirective
 
 from statshandlers import bla
-from shared import extra_cmd_prompts
-from statshandlers import load_suggestions, suggest, strip_emotions, get_excitement_prefix, get_excitement_suffix
+from shared import extra_cmd_prompts, variedPrompts, doc, noise, noise2, noise3, noise_max_millis, noise2_max_millis, noise3_max_millis
+from statshandlers import load_suggestions, suggest, strip_emotions, get_excitement_prefix, get_excitement_suffix,normalize_score, get_one_line, GoalsHandler, random_phrase, random_prompt, pluralize, load_stats, ListTeamNamesHandler, CleanSheetsHandler,FoulsHandler, RedCardHandler, YellowCardHandler, TouchesHandler, TacklesHandler, RefereesHandler
 
 SKILL_NAME = "PremierLeague"
 HELP_MESSAGE = "Say get table, a team name or nickname, red cards, yellow cards, clean sheets, golden boot, fixtures, results, relegation, referees, stadiums by name, touches, fouls and tackles"
@@ -48,7 +49,7 @@ logger.setLevel(logging.DEBUG)
 WELCOME_MESSAGE = "Welcome to PremierLeague"
 table_data = []
 table_index = 0
-variedPrompts = ["Say get table, or say a team name ", "Ask about the table or a team", "What can we tell you about Premier League  ", "We can tell you about teams or the table"]
+#variedPrompts = ["Say get table, or say a team name ", "Ask about the table or a team", "What can we tell you about Premier League  ", "We can tell you about teams or the table"]
 
 class WelcomeHandler(AbstractRequestHandler):
     """Handler for StartIntent."""
@@ -62,237 +63,16 @@ class WelcomeHandler(AbstractRequestHandler):
         # type: (HandlerInput) -> Response
         logger.info("In WelcomeHandler")
         logger.info("test: " + shared.this_is_shared)
-        bla()
+        #bla()
         load_suggestions()
-        suggest()
-        del extra_cmd_prompts["referees"]
+        #suggest()
+        #del extra_cmd_prompts["referees"]
         #load_main_table()
         reload_main_table_as_needed()
         logger.info("first place is {} and last place is {}".format(table_data[0][0], table_data[19][0]))
         
         speech = WELCOME_MESSAGE + ' Say get table, or say a team name '
         handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Hello PremierLeague", speech))
-        return handler_input.response_builder.response
-
-class GoalsHandler(AbstractRequestHandler):
-    """Handler for GoldenBootIntent."""
-
-    def can_handle(self, handler_input):
-        logger.info("in can_handle GoalsHandler")
-        logger.info("intent_name is " + get_intent_name(handler_input))
-        return (is_intent_name("GoldenBootIntent")(handler_input))
-
-    def handle(self, handler_input):
-        logger.info("In GoalsHandler")
-        if "goals" in extra_cmd_prompts:
-            del extra_cmd_prompts["goals"]
-        goal_phrases = ["the players with the most goals are,","the highest scorers are, ","the top scorers are"]
-        intro = random_phrase(0,2, goal_phrases)
-        
-        speech, card_text = load_stats(5, "goldenboot", ", with ", " has ", "  ", 1, 2, 4)
-        speech = intro + speech + ',' + random_prompt()
-        
-        image_url = "https://duy7y3nglgmh.cloudfront.net/Depositphotos_goal.jpg"
-        card = StandardCard(title="Premier League", text=card_text, image=Image(small_image_url=image_url, large_image_url=image_url))
-        handler_input.response_builder.speak(speech).ask(speech).set_card(card)
-        #handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Goals", card_text))
-        return handler_input.response_builder.response
-
-class ListTeamNamesHandler(AbstractRequestHandler):
-    """Handler for ListTeamNamesIntent."""
-
-    def can_handle(self, handler_input):
-        logger.info("in can_handle ListTeamNamesHandler")
-        return (is_intent_name("ListTeamNamesIntent")(handler_input))
-
-    def handle(self, handler_input):
-        logger.info("In ListTeamNamesHandler")
-        team_name_phrases = ["We recognize the following team names","These are the teams in the best league in the world","The best teams are"]
-        intro = random_phrase(0,2, team_name_phrases)
-        speech  = ',,Arsenal, Aston Villa, Brentford, Brighton and Hove Albion, Burnley, Chelsea, Crystal Palace,'
-        speech += 'Everton, Leeds, Leicester City, Liverpool, Manchester City, Manchester United, Newcastle United,'
-        speech += 'Norwich City, Southampton, Tottenham Hotspur, Watford, West Ham United and Wolverhamton Wandereres,,'
-        speech += 'You can also refer to teams by their nicknames like gunners or toffees'
-        speech = intro + speech
-        
-        handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Team Names", intro + speech))
-        return handler_input.response_builder.response
-
-
-class CleanSheetsHandler(AbstractRequestHandler):
-    """Handler for CleanSheetsIntent."""
-
-    def can_handle(self, handler_input):
-        logger.info("in can_handle CleanSheetsHandler")
-        return (is_intent_name("CleanSheetsIntent")(handler_input))
-
-    def handle(self, handler_input):
-        logger.info("In CleanSheetsHandler")
-        if "cleansheets" in extra_cmd_prompts:
-            del extra_cmd_prompts["cleansheets"]
-        clean_phrases = ["the goalkeepers with the most clean sheets are,","the most clean sheets go to, ", "the keepers with the most clean sheets are"]
-        intro = random_phrase(0,2, clean_phrases)
-        
-        speech, card_text = load_stats(5, "cleansheets", ", with ", " has ", "  ", 1, 2, 4)
-        speech = intro + speech + ',' + random_prompt()
-        
-        image_url = "https://duy7y3nglgmh.cloudfront.net/Depositphotos_keeper.jpg"
-        card = StandardCard(title="Premier League", text=card_text, image=Image(small_image_url=image_url, large_image_url=image_url))
-        handler_input.response_builder.speak(speech).ask(speech).set_card(card)
-
-        #handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Goals", card_text))
-        return handler_input.response_builder.response
-
-
-
-class FoulsHandler(AbstractRequestHandler):
-    """Handler for FoulsIntent."""
-
-    def can_handle(self, handler_input):
-        logger.info("in can_handle FoulsHandler")
-        return (is_intent_name("FoulsIntent")(handler_input))
-
-    def handle(self, handler_input):
-        logger.info("In FoulsHandler")
-        if "fouls" in extra_cmd_prompts:
-            del extra_cmd_prompts["fouls"]
-        foul_phrases = ["the players with the most fouls are,","the most fouls were committed by, ","the top foulers were,"]
-        intro = random_phrase(0,2, foul_phrases)
-        
-        speech, card_text = load_stats(5, "fouls", ", with ", " has ", "  ", 1, 2, 4)
-        speech = intro + speech + ',' + random_prompt()
-        
-        image_url = "https://duy7y3nglgmh.cloudfront.net/Depositphotos_fouls.jpg"
-        card = StandardCard(title="Premier League", text=card_text, image=Image(small_image_url=image_url, large_image_url=image_url))
-        handler_input.response_builder.speak(speech).ask(speech).set_card(card)
-
-        #handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Fouls", card_text))
-        return handler_input.response_builder.response
-
-
-class YellowCardHandler(AbstractRequestHandler):
-    """Handler for YellowCardIntent."""
-
-    def can_handle(self, handler_input):
-        logger.info("in can_handle YellowCardHandler")
-        return (is_intent_name("YellowCardIntent")(handler_input))
-
-    def handle(self, handler_input):
-        logger.info("In YellowCardHandler")
-        if "yellowcards" in extra_cmd_prompts:
-            del extra_cmd_prompts["yellowcards"]
-        yellow_phrases = ["the players with the most yellow cards are,", "the most cautioned players are, ", "the most booked players are,"]
-        intro = random_phrase(0,2, yellow_phrases)
-        
-        speech, card_text = load_stats(5, "yellowcards", ", with ", " has ", "  ", 1, 2, 4)
-        speech = intro + speech + ',' + random_prompt()
-        
-        image_url = "https://duy7y3nglgmh.cloudfront.net/yellowcard.png"
-        card = StandardCard(title="Premier League", text=card_text, image=Image(small_image_url=image_url, large_image_url=image_url))
-        handler_input.response_builder.speak(speech).ask(speech).set_card(card)
-
-        #handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Yellow Cards", card_text))
-        return handler_input.response_builder.response
-
-
-class RedCardHandler(AbstractRequestHandler):
-    """Handler for RedCardIntent."""
-
-    def can_handle(self, handler_input):
-        logger.info("in can_handle RedCardHandler")
-        return (is_intent_name("RedCardIntent")(handler_input))
-
-    def handle(self, handler_input):
-        logger.info("In RedCardHandler")
-        if "redcards" in extra_cmd_prompts:
-            del extra_cmd_prompts["redcards"]
-        red_phrases = ["the players with the most red cards are,","the most ejected players are, ","the players leaving their teams playing short the most are, "]
-        intro = random_phrase(0,2, red_phrases)
-        
-        speech, card_text = load_stats(5, "redcards", ", with ", " has ", "  ", 1, 2, 4)
-        speech = intro + speech + ',' + random_prompt();
-        
-        image_url = "https://duy7y3nglgmh.cloudfront.net/redcard.png"
-        card = StandardCard(title="Premier League", text=card_text, image=Image(small_image_url=image_url, large_image_url=image_url))
-        handler_input.response_builder.speak(speech).ask(speech).set_card(card)
-
-        #handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Red Cards", card_text))
-        return handler_input.response_builder.response
-
-
-class TouchesHandler(AbstractRequestHandler):
-    """Handler for TouchesIntent."""
-
-    def can_handle(self, handler_input):
-        logger.info("in can_handle TouchesHandler")
-        return (is_intent_name("TouchesIntent")(handler_input))
-
-    def handle(self, handler_input):
-        logger.info("In TouchesHandler")
-        if "touches" in extra_cmd_prompts:
-            del extra_cmd_prompts["touches"]
-        touch_phrases = ["the players with the most touches are,","the players touching the ball the most are, ", "the most touches go to, "]
-        intro = random_phrase(0,2, touch_phrases)
-        
-        speech, card_text = load_stats(5, "touches", ", with ", " has ", "  ", 1, 2, 4)
-        speech = intro + speech + ',' + random_prompt()
-        
-        image_url = "https://duy7y3nglgmh.cloudfront.net/Depositphotos_touches.jpg"
-        card = StandardCard(title="Premier League", text=card_text, image=Image(small_image_url=image_url, large_image_url=image_url))
-        handler_input.response_builder.speak(speech).ask(speech).set_card(card)
-
-        #handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Touches", card_text))
-        return handler_input.response_builder.response
-
-
-class TacklesHandler(AbstractRequestHandler):
-    """Handler for TacklesIntent."""
-
-    def can_handle(self, handler_input):
-        logger.info("in can_handle TacklesHandler")
-        return (is_intent_name("TacklesIntent")(handler_input))
-
-    def handle(self, handler_input):
-        logger.info("In TacklesHandler")
-        if "tackles" in extra_cmd_prompts:
-            del extra_cmd_prompts["tackles"]
-        tackles_phrases = ["the players with the most tackles are,","the players tackling the most are, ", "the most tackles go to, "]
-        intro = random_phrase(0,2, tackles_phrases)
-        
-        speech, card_text = load_stats(5, "tackles", ", with ", " has ", "  ", 1, 2, 4)
-        speech = intro + speech + ',' + random_prompt()
-        
-        image_url = "https://duy7y3nglgmh.cloudfront.net/tackles.png"
-        card = StandardCard(title="Premier League", text=card_text, image=Image(small_image_url=image_url, large_image_url=image_url))
-        handler_input.response_builder.speak(speech).ask(speech).set_card(card)
-
-        #handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Tackles", card_text))
-        return handler_input.response_builder.response
-
-
-class RefereesHandler(AbstractRequestHandler):
-    """Handler for RefereesIntent."""
-
-    def can_handle(self, handler_input):
-        logger.info("in can_handle RefereesHandler")
-        return (is_intent_name("RefereesIntent")(handler_input))
-
-    def handle(self, handler_input):
-        logger.info("In RefereesHandler")
-        if "referees" in extra_cmd_prompts:
-            del extra_cmd_prompts["referees"]
-        referees_phrases = ["the most used referees are, ","the referees who've called the most games are, ","the referees in charge of the most games are,  "]
-        intro = random_phrase(0,2, referees_phrases)
-        
-        speech, card_text = load_stats(5, "referees", " ", " yellow cards and ", " red cards", 0, 3, 2)
-        speech = intro + speech + ','
-        
-        image_url = "https://duy7y3nglgmh.cloudfront.net/Depositphotos_referee.jpg"
-        card = StandardCard(title="Premier League", text=card_text, image=Image(small_image_url=image_url, large_image_url=image_url))
-        handler_input.response_builder.speak(speech).ask(speech).set_card(card)
-
-        speech = speech + random_prompt()
-        #handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Referees", card_text))
         return handler_input.response_builder.response
 
 
@@ -333,7 +113,8 @@ class TeamHandler(AbstractRequestHandler):
                 form = form + pluralize(table_data[this_team_index][POINTS_INDEX], " point", 's') + ", "
                 form = get_excitement_prefix(this_team_index) + form + get_excitement_suffix()
                 card_text = strip_emotions(speech + form)
-                speech = speech + form + random_prompt()
+                new_intent = f", you can also ask for fixtures or results for {team_name}"
+                speech = speech + form + new_intent
         else:
             err_msg = "could not find team with that name, please try again or ask us for a list of team names"
             team_id = None
@@ -346,11 +127,19 @@ class TeamHandler(AbstractRequestHandler):
             image_url = "https://duy7y3nglgmh.cloudfront.net/" + team_id + ".png"
             card = StandardCard(title="Premier League", text=card_text, image=Image(small_image_url=image_url, large_image_url=image_url))
             logger.info("built standard card")
-            handler_input.response_builder.speak(speech).ask(speech).set_card(card)
+            handler_input.response_builder.ask(speech).set_card(card).add_directive(
+              RenderDocumentDirective(
+                token= "tok",
+                document = {"type" : "Link", "src"  : doc},
+                datasources = {"user": {"name": speech},"crowd": {"noise": noise,"start": str(randrange(0, noise_max_millis))}
+                }
+                )
+            )
         else:    
             logger.info("built simple card")
             handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Premier League", card_text))
         return handler_input.response_builder.response
+
 
 class StadiumHandler(AbstractRequestHandler):
     """Handler for StadiumIntent."""
@@ -406,7 +195,14 @@ class RelegationHandler(AbstractRequestHandler):
         speech = "the teams currently " + thisPhrase + " are " + build_relegation_fragment();
         speech = speech + ',' + random_prompt()
         
-        handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Hello PremierLeague", speech))
+        handler_input.response_builderask(speech).set_card(SimpleCard("Hello PremierLeague", speech)).add_directive(
+              RenderDocumentDirective(
+                token= "tok",
+                document = {"type" : "Link", "src"  : doc},
+                datasources = {"user": {"name": speech},"crowd": {"noise2": noise,"start": str(randrange(0, noise2_max_millis))}
+                }
+                )
+            )
         return handler_input.response_builder.response
 
 
@@ -429,7 +225,14 @@ class TableHandler(AbstractRequestHandler):
         card_text = strip_emotions(speech)
         speech = speech + ' Would you like to hear more?'
         
-        handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Premier League", card_text))
+        handler_input.response_builder.ask(speech).set_card(SimpleCard("Premier League", card_text)).add_directive(
+              RenderDocumentDirective(
+                token= "tok",
+                document = {"type" : "Link", "src"  : doc},
+                datasources = {"user": {"name": speech},"crowd": {"noise": noise,"start": str(randrange(0, noise_max_millis))}
+                }
+                )
+            )
         return handler_input.response_builder.response
 
 
@@ -455,7 +258,14 @@ class FixturesHandler(AbstractRequestHandler):
         speech, card_text = load_stats_ng(5, "fixtures2", " versus ", " ", "  ", 0, 2, -1, "")
         speech = intro + speech + ' Would you like to hear more?'
         
-        handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Fixtures", card_text))
+        handler_input.response_builder.ask(speech).set_card(SimpleCard("Fixtures", card_text)).add_directive(
+              RenderDocumentDirective(
+                token= "tok",
+                document = {"type" : "Link", "src"  : doc},
+                datasources = {"user": {"name": speech},"crowd": {"noise": noise,"start": str(randrange(0, noise_max_millis))}
+                }
+                )
+            )
         return handler_input.response_builder.response
 
 
@@ -481,7 +291,14 @@ class ResultsHandler(AbstractRequestHandler):
         speech, card_text = load_stats_ng(5, "prevWeekFixtures", "  ", "  ", "  ", 0, 2, 1, "")
         speech = intro + speech + ',' + ' Would you like to hear more?'
         
-        handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Results", card_text))
+        handler_input.response_builder.ask(speech).set_card(SimpleCard("Results", card_text)).add_directive(
+              RenderDocumentDirective(
+                token= "tok",
+                document = {"type" : "Link", "src"  : doc},
+                datasources = {"user": {"name": speech},"crowd": {"noise": noise,"start": str(randrange(0, noise_max_millis))}
+                }
+                )
+            )
         return handler_input.response_builder.response
 
 
@@ -512,8 +329,16 @@ class TeamResultsHandler(AbstractRequestHandler):
         speech, card_text = load_stats_ng(5, "prevWeekFixtures", "  ", "  ", "  ", 0, 2, 1, team_name)
         speech = intro + speech + ',' + random_prompt()
         
-        handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Results", card_text))
+        handler_input.response_builder.ask(speech).set_card(SimpleCard("Results", card_text)).add_directive(
+              RenderDocumentDirective(
+                token= "tok",
+                document = {"type" : "Link", "src"  : doc},
+                datasources = {"user": {"name": speech},"crowd": {"noise": noise3,"start": str(randrange(0, noise3_max_millis))}
+                }
+                )
+            )
         return handler_input.response_builder.response
+
 
 class TeamFixturesHandler(AbstractRequestHandler):
     """Handler for TeamFixturesIntent."""
@@ -543,7 +368,14 @@ class TeamFixturesHandler(AbstractRequestHandler):
         speech, card_text = load_stats_ng(5, "fixtures2", " versus ", " ", "  ", 0, 2, -1, team_name)
         speech = intro + speech + ',' + random_prompt()
         
-        handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Fixtures", card_text))
+        handler_input.response_builder.ask(speech).set_card(SimpleCard("Fixtures", card_text)).add_directive(
+              RenderDocumentDirective(
+                token= "tok",
+                document = {"type" : "Link", "src"  : doc},
+                datasources = {"user": {"name": speech},"crowd": {"noise": noise,"start": str(randrange(0, noise_max_millis))}
+                }
+                )
+            )
         return handler_input.response_builder.response
 
 
@@ -574,7 +406,14 @@ class YesHandler(AbstractRequestHandler):
                 session_attr["table_index"] = 0
             handler_input.attributes_manager.session_attributes = session_attr
     
-            handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Premier League", card_text))
+            handler_input.response_builder.ask(speech).set_card(SimpleCard("Premier League", card_text)).add_directive(
+              RenderDocumentDirective(
+                token= "tok",
+                document = {"type" : "Link", "src"  : doc},
+                datasources = {"user": {"name": speech},"crowd": {"noise": noise,"start": str(randrange(0, noise_max_millis))}
+                }
+                )
+            )
             return handler_input.response_builder.response
         elif which_list == "fixtures":
             intro = 'The next five fixtures are'
@@ -583,7 +422,14 @@ class YesHandler(AbstractRequestHandler):
             handler_input.attributes_manager.session_attributes = session_attr
             speech, card_text = load_stats_ng(5, "fixtures2", " versus ", " ", "  ", 0, 2, -1, "", fixture_index)
             speech = intro + speech + ' Would you like to hear more?'
-            handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Premier League", card_text))
+            handler_input.response_builder.ask(speech).set_card(SimpleCard("Premier League", card_text)).add_directive(
+              RenderDocumentDirective(
+                token= "tok",
+                document = {"type" : "Link", "src"  : doc},
+                datasources = {"user": {"name": speech},"crowd": {"noise": noise,"start": str(randrange(0, noise_max_millis))}
+                }
+                )
+            )
             return handler_input.response_builder.response
         else:
             intro = 'The next five results were'
@@ -592,8 +438,16 @@ class YesHandler(AbstractRequestHandler):
             handler_input.attributes_manager.session_attributes = session_attr
             speech, card_text = load_stats_ng(5, "prevWeekFixtures", "  ", "  ", "  ", 0, 2, 1, "", results_index)
             speech = intro + speech + ' Would you like to hear more?'
-            handler_input.response_builder.speak(speech).ask(speech).set_card(SimpleCard("Premier League", card_text))
+            handler_input.response_builder.ask(speech).set_card(SimpleCard("Premier League", card_text)).add_directive(
+              RenderDocumentDirective(
+                token= "tok",
+                document = {"type" : "Link", "src"  : doc},
+                datasources = {"user": {"name": speech},"crowd": {"noise": noise,"start": str(randrange(0, noise_max_millis))}
+                }
+                )
+            )
             return handler_input.response_builder.response
+
 
 class NoHandler(AbstractRequestHandler):
     """Handler for NoIntent."""
@@ -773,52 +627,6 @@ def find_team_index(team_id):
     return -1
 
     
-def random_phrase(low, high, phrases):
-    return phrases[randrange(low, high)];
-
-
-def random_prompt():
-    return variedPrompts[randrange(0, 3)] + suggest();
-  
-    
-def pluralize(count, noun, ess):
-    if int(count) == 1:
-        return count + " " + noun
-    else:
-        return count + " " + noun + ess
-        
-# def load_suggestions():
-#     extra_cmd_prompts["touches"]      = ". you can also ask about touches"
-#     extra_cmd_prompts["fouls"]        = ". you can also ask about fouls"
-#     extra_cmd_prompts["tackles"]      = ". you can also ask about tackles"
-#     extra_cmd_prompts["stadiums"]     = ". you can also ask about Premier League stadiums by name"
-#     extra_cmd_prompts["referees"]     = ". you can also ask about referees"
-#     extra_cmd_prompts["fixtures"]     = ". you can also ask about fixtures"
-#     extra_cmd_prompts["results"]      = ". you can also ask about last weeks results"
-#     extra_cmd_prompts["teamfixtures"] = ". you can also ask about fixtures for a team"
-#     extra_cmd_prompts["teamresults"]  = ". you can also ask about results for a team"
-#     extra_cmd_prompts["relegation"]   = ". you can also ask about relegation"
-#     extra_cmd_prompts["redcards"]     = ". you can also say red cards"
-#     extra_cmd_prompts["yellowcards"]  = ". you can also say yellow card"
-#     extra_cmd_prompts["cleansheets"]  = ". you can also ask about clean sheets"
-#     extra_cmd_prompts["goals"]        = ". you can also ask about goals"
-#     extra_cmd_prompts["teamresults"]  = ". you can also say, how has my team done recently"
-
-
-# def suggest():
-#     suggestions_left = len(extra_cmd_prompts)
-#     logger.info("There are {} suggestions remaining".format(suggestions_left))
-#     sugs = " "
-#     if suggestions_left > 0:
-#         key,value = random.choice(list(extra_cmd_prompts.items()))
-#         #del extra_cmd_prompts[key]
-#         logger.info("suggesting " + value)
-#         return value
-#     else:
-#         load_suggestions()    
-#     return ""
-
-    
 def build_table_fragment(table_index):
     table_fragment = ""
     reload_main_table_as_needed()
@@ -842,26 +650,6 @@ def build_relegation_fragment():
         relegation_fragment = relegation_fragment + say_place(index+1) + " " + table_data[index][NAME_INDEX] + " with " + pluralize(table_data[index][POINTS_INDEX], 'point', 's') + ', '
     return '<amazon:emotion name="disappointed" intensity="high">' + relegation_fragment + '</amazon:emotion>'
     
-
-# def get_excitement_prefix(index):
-#     ''' speak with excitement or disappointment but with some randomness '''
-    
-#     high_or_medium = "high" if randrange(0,2)==0 else "medium"
-#     medium_or_low = "medium" if randrange(0,2)==0 else "low"
-    
-#     if index < 5:
-#         return '<amazon:emotion name="excited" intensity="{}">'.format(high_or_medium)
-#     elif index < 10:
-#         return '<amazon:emotion name="excited" intensity="{}">'.format(medium_or_low)
-#     elif index < 15:
-#         return '<amazon:emotion name="disappointed" intensity="{}">'.format(medium_or_low)
-#     else:
-#         return '<amazon:emotion name="disappointed" intensity="high">'.format(high_or_medium)
-        
-        
-# def get_excitement_suffix():
-#     return '</amazon:emotion>'
-
         
 def say_place(table_index):
     if table_index == 1:
@@ -904,40 +692,6 @@ def load_main_table():
     logger.info("loaded {} teams into table_data".format(len(table_data)))
 
 
-def normalize_score(score):
-    if score.find(" to ") != -1:
-        res = score.split(" ")
-        if res[2] > res[0]:
-            score = res[2] + " " + res[1] + " " + res[0]
-        score = score.replace("0", "nil")
-        return score
-    else:
-        return score
-
-    
-def get_one_line(noun1, article1, noun2, article2, noun3, article3):
-    found_number_or_none = re.search("[0-9]", noun1)
-    found_number = False if found_number_or_none is None else True
-    
-    found_nil = noun1.find('nil')
-    
-    noun3 = normalize_score(noun3)
-    if found_number or found_nil != -1:
-        return noun1 + "<break time='350ms'/>" + noun2
-    else:
-        return noun1 + article1 + noun2 + article2 + noun3 + article3 + ","
-
-
-# def strip_emotions(str):
-#     try:
-#         index = str.index("<")
-#         index2 = str.index(">")
-#         str2 = str[:index] + str[index2+1:]
-#         return str2.replace("</amazon:emotion>","")
-#     except:
-#         return str
-
-    
 def load_stats_ng(number, filename, article1, article2, article3, firstCol, secondCol, thirdCol, team_to_match, lines_to_skip=0):
     say = ""
     card_text = ""
@@ -1024,25 +778,3 @@ def team_matches(team_name, text_to_search):
         logger.info(f"{name_to_look_for} FOUND in {text_to_search}")
     return match_index != -1
 
-    
-def load_stats(number, filename, article1, article2, article3, firstCol, secondCol, thirdCol):
-    say = ""
-    card_text = ""
-    s3 = boto3.client("s3")
-    bucket = "bpltables"
-    logger.info('try to open file ' + bucket + ":" + filename)
-    resp = s3.get_object(Bucket=bucket, Key=filename)
-    body_str = resp['Body'].read().decode("utf-8")
-    logger.info("converted streaming_body to string")
-    logger.info(body_str)
-    n = body_str.split("\n")
-    oneCard = n[0].split(',')
-    
-    for index in range(0,number):
-        oneCard = n[index].split(',')
-        third = oneCard[thirdCol] if thirdCol > -1 else ""
-        new_text = get_one_line(oneCard[firstCol], article1, oneCard[secondCol], article2, third, article3)
-        say = say + ", " + new_text
-        card_text = card_text + new_text + "\n"
-        logger.info("building at index {} {}".format(index, say))
-    return (say, strip_emotions(card_text))

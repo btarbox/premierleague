@@ -1,3 +1,10 @@
 this_is_shared = "test of shared global"
 extra_cmd_prompts = {}
-
+variedPrompts = ["Say get table, or say a team name ", "Ask about the table or a team", "What can we tell you about Premier League  ", "We can tell you about teams or the table"]
+noise  = "https://btbscratch.s3.amazonaws.com/FootballCrowdSound.mp3"
+noise2 = "https://btbscratch.s3.amazonaws.com/SoccerStadiumSoundEffect.mp3"
+noise3 = "https://btbscratch.s3.amazonaws.com/SportsStadiumCrowdCheering.mp3"
+noise_max_millis = 4 * 60 * 1000
+noise2_max_millis = 40 * 1000
+noise3_max_millis = 40 * 1000
+doc = "doc://alexa/apla/documents/unchanged_template_from_tools"

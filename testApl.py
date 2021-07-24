@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# This is a simple Hello World Alexa Skill, built using
-# the implementation of handler classes approach in skill builder.
+
 import logging
 
 from ask_sdk_core.skill_builder import SkillBuilder
@@ -13,8 +12,8 @@ from ask_sdk_core.handler_input import HandlerInput
 from ask_sdk_core.utils import get_supported_interfaces
 from ask_sdk_model.ui import SimpleCard,StandardCard, Image
 from ask_sdk_model import Response
-#from ask_sdk_model.interfaces.alexa.presentation.apl import (RenderDocumentDirective)
-from ask_sdk_model.interfaces.alexa.presentation.apla import RenderDocumentDirective
+from ask_sdk_model.interfaces.alexa.presentation.apl import RenderDocumentDirective as APLRenderDocumentDirective
+from ask_sdk_model.interfaces.alexa.presentation.apla import RenderDocumentDirective as APLARenderDocumentDirective
 import json
 from random import randrange
 
@@ -38,39 +37,8 @@ class LaunchRequestHandler(AbstractRequestHandler):
     def handle(self, handler_input):
         # type: (HandlerInput) -> Response
         logger.info("*****  at handle launch request   *******")
-        speech_text = "Welcome to the Alexa Skills Kit, you can say hello!"
+        speech_text = "Welcome to the Alexa APLA demo"
 
-        # directive =  [
-        #       {
-        #         "type": "Alexa.Presentation.APL.RenderDocument",
-        #         "token": {
-        #           "document": {
-        #             "type": "Link",
-        #             "src": "doc://alexa/apla/documents/test_crowd_noise"
-        #           }
-        #         }
-        #       }
-        #     ]
-        
-        # return(
-        #     handler_input.response_builder.add_directive({
-        #             "object_type": 'Alexa.Presentation.APLA.RenderDocument',
-        #             "version": '0.91',
-        #             "document": load_apl_document("hello.json"),
-        #     }))
-        
-        # return(
-        #     handler_input.response_builder
-        #     .add_directive({
-        #         "type": "Alexa.Presentation.APLA.RenderDocument",
-        #         "token": "mytoken",
-        #         "document": {
-        #             "type":"Link",
-        #             "src":  "doc://alexa/apla/documents/test_crowd_noise"
-        #         }, }               
-        #     )
-        # )
-        #if get_supported_interfaces(handler_input).alexa_presentation_apl is not None:
         logger.info("about to return response")
         image_url = "https://duy7y3nglgmh.cloudfront.net/Depositphotos_referee.jpg"
         card = StandardCard(title="Premier League", text="bla", image=Image(small_image_url=image_url, large_image_url=image_url))
@@ -78,50 +46,289 @@ class LaunchRequestHandler(AbstractRequestHandler):
         return(
         handler_input.response_builder
           #.speak("this is the speak")
-          .ask("this is the ask").set_card(card)
-          .add_directive( 
-              RenderDocumentDirective(
-                token= "developer-provided-string",
-                document = {
-                "type" : "Link",
-                "src"  : "doc://alexa/apla/documents/unchanged_template_from_tools"
-                },
-                datasources = {
-                    "user": {
-                      "name": "You asked about Liverpool, <amazon:emotion name=\"excited\" intensity=\"medium\">their form is third place with 20 wins, 9  draws, 9  losses, 68  goals scored, 42  goals allowed,  for a goal difference of +26, and 69  points, </amazon:emotion>Say get table, or say a team name"
-                      },
-                    "crowd": {
-                        "noise": "https://btbscratch.s3.amazonaws.com/FootballCrowdSound.mp3",
-                        "start": str(randrange(0, 50*60))
-                    }
-                }              
-            )
-            ).response
-        )
-        # else:
-        #     return(handler_input.response_builder.speak("complex voice not supported").ask("try again").response)
-
-        #logger.info("build response")
-        #return handler_input.response_builder.response
-                # "document": {
-                #  "type": "Link",
-                #  "src":  "doc://alexa/apla/documents/test_crowd_noise",
+          .ask("this is the ask").set_card(card).response)
 
 
-class HelloWorldIntentHandler(AbstractRequestHandler):
-    """Handler for Hello World Intent."""
+
+
+
+
+class SimpleTextIntentHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
-        # type: (HandlerInput) -> bool
-        return is_intent_name("HelloWorldIntent")(handler_input)
+        return is_intent_name("SimpleTextIntent")(handler_input)
 
     def handle(self, handler_input):
-        # type: (HandlerInput) -> Response
-        speech_text = "Hello Python World from Classes!"
+        speech_text = "This is a simple spoken response"
 
-        handler_input.response_builder.speak(speech_text).set_card(
-            SimpleCard("Hello World", speech_text)).set_should_end_session(
-            True)
-        return handler_input.response_builder.response
+        return (
+            handler_input.response_builder
+                .ask("this is the reprompt")
+                .speak(speech_text).response
+        )
+
+
+
+
+
+
+class TextWithEmotionIntentHandler(AbstractRequestHandler):
+    def can_handle(self, handler_input):
+        return is_intent_name("TextWithEmotionIntent")(handler_input)
+
+    def handle(self, handler_input):
+        speech_text = "This is a simple spoken response \
+                        <amazon:emotion name=\"excited\" intensity=\"high\"> \
+                         with emotion indicators, Liverpool wins the league and so on and so \
+                         on emotions take time \
+                        </amazon:emotion>"
+        return (
+            handler_input.response_builder
+                .ask("this is the reprompt")
+                .speak(speech_text)
+                .set_should_end_session(False).response
+        )
+
+
+
+
+
+class SimpleCardIntentHandler(AbstractRequestHandler):
+    def can_handle(self, handler_input):
+        return is_intent_name("SimpleCardIntent")(handler_input)
+
+    def handle(self, handler_input):
+        speech_text = "This is a simple spoken response with a simple card"
+
+        return (
+            handler_input.response_builder
+                .ask("this is the reprompt")
+                .speak(speech_text)
+                .set_card(SimpleCard("Hello World", speech_text))
+                .set_should_end_session(False).response
+        )
+
+
+
+
+class StandardCardIntentHandler(AbstractRequestHandler):
+    def can_handle(self, handler_input):
+        return is_intent_name("StandardCardIntent")(handler_input)
+
+    def handle(self, handler_input):
+        speech_text = "This is a simple spoken response with a standard card"
+        image_url = "https://duy7y3nglgmh.cloudfront.net/tackles.png"
+        card = StandardCard(title="Premier League", text=speech_text, image=Image(small_image_url=image_url, large_image_url=image_url))
+
+        return (
+            handler_input.response_builder
+                .ask("this is the reprompt")
+                .speak(speech_text)
+                .set_card(card)
+                .set_should_end_session(False).response
+        )
+
+
+
+
+class AudioMixIntentHandler(AbstractRequestHandler):
+    def can_handle(self, handler_input):
+        return is_intent_name("AudioMixIntent")(handler_input)
+
+    def handle(self, handler_input):
+        card_text = "This is a AudioMixed response with a standard card"
+        image_url = "https://duy7y3nglgmh.cloudfront.net/tackles.png"
+        card = StandardCard(title="Premier League", text=card_text, image=Image(small_image_url=image_url, large_image_url=image_url))
+
+        return (
+            handler_input.response_builder
+                .ask("this is the reprompt")
+                .set_card(card)
+                .set_should_end_session(False)          
+                .add_directive( 
+                  RenderDocumentDirective(
+                    token= "developer-provided-string",
+                    document = {
+                        "type" : "Link",
+                        "src"  : "doc://alexa/apla/documents/template_without_data_sources"
+                    },
+                    datasources = {}              
+                  )
+                ).response
+        )
+
+
+
+
+class AudioMixWithDataSourceIntentHandler(AbstractRequestHandler):
+    def can_handle(self, handler_input):
+        return is_intent_name("AudioMixWithDataSourceIntent")(handler_input)
+
+    def handle(self, handler_input):
+        card_text = "This is a AudioMixed response with data and a standard card"
+        image_url = "https://duy7y3nglgmh.cloudfront.net/tackles.png"
+        card = StandardCard(title="Premier League", text=card_text, image=Image(small_image_url=image_url, large_image_url=image_url))
+
+        return (
+            handler_input.response_builder
+                .ask("this is the reprompt")
+                .set_card(card)
+                .set_should_end_session(False)          
+                .add_directive( 
+                  RenderDocumentDirective(
+                    token= "developer-provided-string",
+                    document = {
+                        "type" : "Link",
+                        "src"  : "doc://alexa/apla/documents/template_with_data_sources"
+                    },
+                    datasources = {
+                        "text": {
+                          "speak": "This is the text that will be spoken at the same time the audio \
+                          clip plays, it is dynamic and set by the lambda"
+                        },
+                        "crowd": {
+                            "noise": "https://btbscratch.s3.amazonaws.com/FootballCrowdSound.mp3",
+                            "start": str(randrange(0, 50*60))
+                        }
+                    }              
+                  )
+                ).response
+        )
+
+
+
+
+class GridMixIntentHandler(AbstractRequestHandler):
+    def can_handle(self, handler_input):
+        return is_intent_name("GridMixIntent")(handler_input)
+
+    def handle(self, handler_input):
+        card_text = "This is a GridMixed response with a standard card"
+        image_url = "https://duy7y3nglgmh.cloudfront.net/tackles.png"
+        card = StandardCard(title="Premier League", text=card_text, image=Image(small_image_url=image_url, large_image_url=image_url))
+
+        return (
+            handler_input.response_builder
+                .speak("bla bla bla ginger")
+                .set_should_end_session(False)          
+                .add_directive( 
+                  APLRenderDocumentDirective(
+                    token= "developer-provided-string",
+                    document = {
+                        "type" : "Link",
+                        "token" : "my token",
+                        "src"  : "doc://alexa/apl/documents/GridList"
+                    },
+                    datasources = {
+                        "gridListData": {
+                            "type": "object",
+                            "objectId": "gridListSample",
+                            "backgroundImage": {
+                                "contentDescription": "this is the content",
+                                "smallSourceUrl": "https://duy7y3nglgmh.cloudfront.net/football_pitch.png",
+                                "largeSourceUrl": "https://duy7y3nglgmh.cloudfront.net/football_pitch.png",
+                                "sources": [
+                                    {
+                                        "url": "https://duy7y3nglgmh.cloudfront.net/football_pitch.png",
+                                        "size": "small",
+                                        "widthPixels": 0,
+                                        "heightPixels": 0
+                                    },
+                                    {
+                                        "url": "https://duy7y3nglgmh.cloudfront.net/football_pitch.png",
+                                        "size": "large",
+                                        "widthPixels": 0,
+                                        "heightPixels": 0
+                                    }
+                                ]
+                            },
+                            "title": "Statistics You Can Request",
+                            "listItems": [
+                                {
+                                    "primaryText": "Tackles",
+                                    "imageSource": "https://duy7y3nglgmh.cloudfront.net/tackles.png",
+                                    "primaryAction": [
+                                        {
+                                            "type": "SendEvent",
+                                            "arguments": ["tackles"]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "primaryText": "Fouls",
+                                    "imageSource": "https://duy7y3nglgmh.cloudfront.net/fouls.png",
+                                    "primaryAction": [
+                                        {
+                                            "type": "SendEvent",
+                                            "arguments": ["fouls"]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "primaryText": "Yellow Card",
+                                    "imageSource": "https://duy7y3nglgmh.cloudfront.net/yellowcard.png",
+                                    "primaryAction": [{"type": "SendEvent","arguments": ["yellowcard"]}]
+                                },
+                                {
+                                    "primaryText": "Red Card",
+                                    "imageSource": "https://duy7y3nglgmh.cloudfront.net/redcard.png",
+                                    "primaryAction": [{"type": "SendEvent","arguments": ["redcard"]}]
+                                },
+                                {
+                                    "primaryText": "Goals",
+                                    "imageSource": "https://duy7y3nglgmh.cloudfront.net/Depositphotos_goal.jpg",
+                                    "primaryAction": [{"type": "SendEvent","arguments": ["goals"]}]
+                                },
+                                {
+                                    "primaryText": "Clean Sheets",
+                                    "imageSource": "https://duy7y3nglgmh.cloudfront.net/Depositphotos_keeper.jpg",
+                                    "primaryAction": [{"type": "SendEvent","arguments": ["cleansheet"]}]
+                                },
+                                {
+                                    "primaryText": "Touches",
+                                    "imageSource": "https://duy7y3nglgmh.cloudfront.net/Depositphotos_touches.jpg",
+                                    "primaryAction": [{"type": "SendEvent","arguments": ["touches"]}]
+                                },
+                                {
+                                    "primaryText": "Referees",
+                                    "imageSource": "https://duy7y3nglgmh.cloudfront.net/Depositphotos_referee.jpg",
+                                    "primaryAction": [{"type": "SendEvent","arguments": ["referee"]}]
+                                },
+                            ],
+                            "logoUrl": "https://duy7y3nglgmh.cloudfront.net/redcard.png"
+                        }                        
+                    }              
+                  )
+                ).response
+        )
+
+
+class ButtonEventHandler(AbstractRequestHandler):
+    def can_handle(self, handler_input):
+        # type: (HandlerInput) -> bool
+        # Since an APL skill might have multiple buttons that generate
+        # UserEvents, use the event source ID to determine the button press
+        # that triggered this event and use the correct handler.
+        # In this example, the string 'fadeHelloTextButton' is the ID we set
+        # on the AlexaButton in the document.
+ 
+        # The user_event.source is a dict object. We can retrieve the id
+        # using the get method on the dictionary.
+        logger.info("at ButtonEventHandler")
+        if is_request_type("Alexa.Presentation.APL.UserEvent")(handler_input):
+            user_event = handler_input.request_envelope.request  # type: UserEvent
+            return True
+        else:
+            return False
+ 
+    def handle(self, handler_input):
+        # type: (HandlerInput) -> Response
+        logger.info("at ButtonEventHandler.handle " + str(handler_input.request_envelope.request))
+        logger.info("at ButtonEventHandler.handle " + str(handler_input.request_envelope.request.source))
+        logger.info("at ButtonEventHandler.handle " + str(handler_input.request_envelope.request.arguments))
+        speech_text = (f"Thank you, {handler_input.request_envelope.request.arguments[0]}")
+ 
+        return handler_input.response_builder.speak(speech_text).ask("try again").response
+
 
 
 class HelpIntentHandler(AbstractRequestHandler):
@@ -209,7 +416,7 @@ class RequestLogger(AbstractRequestInterceptor):
     """Log the alexa requests."""
     def process(self, handler_input):
         # type: (HandlerInput) -> None
-        logger.info("Alexa Request: {}".format(
+        logger.info("Alexa Request was: {}".format(
             handler_input.request_envelope.request))
 
 
@@ -220,7 +427,14 @@ class ResponseLogger(AbstractResponseInterceptor):
         logger.info("Alexa Response: {}".format(response))
 
 sb.add_request_handler(LaunchRequestHandler())
-sb.add_request_handler(HelloWorldIntentHandler())
+sb.add_request_handler(SimpleTextIntentHandler())
+sb.add_request_handler(TextWithEmotionIntentHandler())
+sb.add_request_handler(SimpleCardIntentHandler())
+sb.add_request_handler(StandardCardIntentHandler())
+sb.add_request_handler(AudioMixIntentHandler())
+sb.add_request_handler(GridMixIntentHandler())
+sb.add_request_handler(ButtonEventHandler())
+sb.add_request_handler(AudioMixWithDataSourceIntentHandler())
 sb.add_request_handler(HelpIntentHandler())
 sb.add_request_handler(CancelOrStopIntentHandler())
 sb.add_request_handler(FallbackIntentHandler())
@@ -231,4 +445,5 @@ sb.add_global_response_interceptor(ResponseLogger())
 sb.add_exception_handler(CatchAllExceptionHandler())
 
 handler = sb.lambda_handler()
+
 

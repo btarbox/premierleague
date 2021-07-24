@@ -16,12 +16,40 @@ from ask_sdk_model.interfaces.alexa.presentation.apl import RenderDocumentDirect
 from ask_sdk_model.interfaces.alexa.presentation.apla import RenderDocumentDirective as APLARenderDocumentDirective
 import json
 from random import randrange
-
+from shared import datasources2, test_speach_data, noise_data
 
 sb = SkillBuilder()
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
+
+def say_stats(handler_input, text_to_speak): 
+        noise_index = randrange(0, 3)
+        return (
+            handler_input.response_builder
+                .ask("this is the reprompt")
+                .set_should_end_session(False)          
+                .add_directive( 
+                  APLARenderDocumentDirective(
+                    token= "developer-provided-string",
+                    document = {
+                        "type" : "Link",
+                        "src"  : "doc://alexa/apla/documents/template_with_data_sources"
+                    },
+                    datasources = {
+                        "text": {
+                          "speak": text_to_speak
+                        },
+                        "crowd": {
+                            "noise": noise_data[noise_index][0],
+                            "start": str(randrange(0, noise_data[noise_index][1]))
+                        }
+                        
+                    }              
+                  )
+                ).response)
+
+
 
 def load_apl_document(file_path):
     with open(file_path) as f:
@@ -205,101 +233,94 @@ class GridMixIntentHandler(AbstractRequestHandler):
         card_text = "This is a GridMixed response with a standard card"
         image_url = "https://duy7y3nglgmh.cloudfront.net/tackles.png"
         card = StandardCard(title="Premier League", text=card_text, image=Image(small_image_url=image_url, large_image_url=image_url))
+        if get_supported_interfaces(handler_input).alexa_presentation_apl is not None:
+            return (
+                handler_input.response_builder
+                    .speak("Welcome to Premier League")
+                    .set_should_end_session(False)          
+                    .add_directive( 
+                      APLRenderDocumentDirective(
+                        token= "developer-provided-string",
+                        document = {
+                            "type" : "Link",
+                            "token" : "my token",
+                            "src"  : "doc://alexa/apl/documents/GridList"
+                        },
+                        datasources = datasources2 
+                        #     "gridListData": {
+                        #         "type": "object",
+                        #         "objectId": "gridListSample",
+                        #         "backgroundImage": {
+                        #             "contentDescription": "this is the content",
+                        #             "smallSourceUrl": "https://duy7y3nglgmh.cloudfront.net/football_pitch.png",
+                        #             "largeSourceUrl": "https://duy7y3nglgmh.cloudfront.net/football_pitch.png",
+                        #             "sources": [
+                        #                 {
+                        #                     "url": "https://duy7y3nglgmh.cloudfront.net/football_pitch.png",
+                        #                     "size": "small",
+                        #                     "widthPixels": 0,
+                        #                     "heightPixels": 0
+                        #                 },
+                        #                 {
+                        #                     "url": "https://duy7y3nglgmh.cloudfront.net/football_pitch.png",
+                        #                     "size": "large",
+                        #                     "widthPixels": 0,
+                        #                     "heightPixels": 0
+                        #                 }
+                        #             ]
+                        #         },
+                        #         "title": "You can ask about ....",
+                        #         "listItems": [
+                        #             {
+                        #                 "primaryText": "Tackles",
+                        #                 "imageSource": "https://duy7y3nglgmh.cloudfront.net/tackles.png",
+                        #                 "primaryAction": [{"type": "SendEvent","arguments": ["tackles"]}]
+                        #             },
+                        #             {
+                        #                 "primaryText": "Fouls",
+                        #                 "imageSource": "https://duy7y3nglgmh.cloudfront.net/fouls.png",
+                        #                 "primaryAction": [{"type": "SendEvent","arguments": ["fouls"]}]
+                        #             },
+                        #             {
+                        #                 "primaryText": "Yellow Card",
+                        #                 "imageSource": "https://duy7y3nglgmh.cloudfront.net/yellowcard.png",
+                        #                 "primaryAction": [{"type": "SendEvent","arguments": ["yellowcard"]}]
+                        #             },
+                        #             {
+                        #                 "primaryText": "Red Card",
+                        #                 "imageSource": "https://duy7y3nglgmh.cloudfront.net/redcard.png",
+                        #                 "primaryAction": [{"type": "SendEvent","arguments": ["redcard"]}]
+                        #             },
+                        #             {
+                        #                 "primaryText": "Goals",
+                        #                 "imageSource": "https://duy7y3nglgmh.cloudfront.net/Depositphotos_goal.jpg",
+                        #                 "primaryAction": [{"type": "SendEvent","arguments": ["goals"]}]
+                        #             },
+                        #             {
+                        #                 "primaryText": "Clean Sheets",
+                        #                 "imageSource": "https://duy7y3nglgmh.cloudfront.net/Depositphotos_keeper.jpg",
+                        #                 "primaryAction": [{"type": "SendEvent","arguments": ["cleansheet"]}]
+                        #             },
+                        #             {
+                        #                 "primaryText": "Touches",
+                        #                 "imageSource": "https://duy7y3nglgmh.cloudfront.net/Depositphotos_touches.jpg",
+                        #                 "primaryAction": [{"type": "SendEvent","arguments": ["touches"]}]
+                        #             },
+                        #             {
+                        #                 "primaryText": "Referees",
+                        #                 "imageSource": "https://duy7y3nglgmh.cloudfront.net/Depositphotos_referee.jpg",
+                        #                 "primaryAction": [{"type": "SendEvent","arguments": ["referee"]}]
+                        #             },
+                        #         ],
+                        #         "logoUrl": "https://duy7y3nglgmh.cloudfront.net/redcard.png"
+                        #     }                        
+                        # }              
+                      )
+                    ).response
+                )
+        else:
+            return (handler_input.response_builder.speak("no screen for you").set_should_end_session(False).response)      
 
-        return (
-            handler_input.response_builder
-                .speak("bla bla bla ginger")
-                .set_should_end_session(False)          
-                .add_directive( 
-                  APLRenderDocumentDirective(
-                    token= "developer-provided-string",
-                    document = {
-                        "type" : "Link",
-                        "token" : "my token",
-                        "src"  : "doc://alexa/apl/documents/GridList"
-                    },
-                    datasources = {
-                        "gridListData": {
-                            "type": "object",
-                            "objectId": "gridListSample",
-                            "backgroundImage": {
-                                "contentDescription": "this is the content",
-                                "smallSourceUrl": "https://duy7y3nglgmh.cloudfront.net/football_pitch.png",
-                                "largeSourceUrl": "https://duy7y3nglgmh.cloudfront.net/football_pitch.png",
-                                "sources": [
-                                    {
-                                        "url": "https://duy7y3nglgmh.cloudfront.net/football_pitch.png",
-                                        "size": "small",
-                                        "widthPixels": 0,
-                                        "heightPixels": 0
-                                    },
-                                    {
-                                        "url": "https://duy7y3nglgmh.cloudfront.net/football_pitch.png",
-                                        "size": "large",
-                                        "widthPixels": 0,
-                                        "heightPixels": 0
-                                    }
-                                ]
-                            },
-                            "title": "Statistics You Can Request",
-                            "listItems": [
-                                {
-                                    "primaryText": "Tackles",
-                                    "imageSource": "https://duy7y3nglgmh.cloudfront.net/tackles.png",
-                                    "primaryAction": [
-                                        {
-                                            "type": "SendEvent",
-                                            "arguments": ["tackles"]
-                                        }
-                                    ]
-                                },
-                                {
-                                    "primaryText": "Fouls",
-                                    "imageSource": "https://duy7y3nglgmh.cloudfront.net/fouls.png",
-                                    "primaryAction": [
-                                        {
-                                            "type": "SendEvent",
-                                            "arguments": ["fouls"]
-                                        }
-                                    ]
-                                },
-                                {
-                                    "primaryText": "Yellow Card",
-                                    "imageSource": "https://duy7y3nglgmh.cloudfront.net/yellowcard.png",
-                                    "primaryAction": [{"type": "SendEvent","arguments": ["yellowcard"]}]
-                                },
-                                {
-                                    "primaryText": "Red Card",
-                                    "imageSource": "https://duy7y3nglgmh.cloudfront.net/redcard.png",
-                                    "primaryAction": [{"type": "SendEvent","arguments": ["redcard"]}]
-                                },
-                                {
-                                    "primaryText": "Goals",
-                                    "imageSource": "https://duy7y3nglgmh.cloudfront.net/Depositphotos_goal.jpg",
-                                    "primaryAction": [{"type": "SendEvent","arguments": ["goals"]}]
-                                },
-                                {
-                                    "primaryText": "Clean Sheets",
-                                    "imageSource": "https://duy7y3nglgmh.cloudfront.net/Depositphotos_keeper.jpg",
-                                    "primaryAction": [{"type": "SendEvent","arguments": ["cleansheet"]}]
-                                },
-                                {
-                                    "primaryText": "Touches",
-                                    "imageSource": "https://duy7y3nglgmh.cloudfront.net/Depositphotos_touches.jpg",
-                                    "primaryAction": [{"type": "SendEvent","arguments": ["touches"]}]
-                                },
-                                {
-                                    "primaryText": "Referees",
-                                    "imageSource": "https://duy7y3nglgmh.cloudfront.net/Depositphotos_referee.jpg",
-                                    "primaryAction": [{"type": "SendEvent","arguments": ["referee"]}]
-                                },
-                            ],
-                            "logoUrl": "https://duy7y3nglgmh.cloudfront.net/redcard.png"
-                        }                        
-                    }              
-                  )
-                ).response
-        )
 
 
 class ButtonEventHandler(AbstractRequestHandler):
@@ -325,10 +346,18 @@ class ButtonEventHandler(AbstractRequestHandler):
         logger.info("at ButtonEventHandler.handle " + str(handler_input.request_envelope.request))
         logger.info("at ButtonEventHandler.handle " + str(handler_input.request_envelope.request.source))
         logger.info("at ButtonEventHandler.handle " + str(handler_input.request_envelope.request.arguments))
-        speech_text = (f"Thank you, {handler_input.request_envelope.request.arguments[0]}")
+        first_arg = handler_input.request_envelope.request.arguments[0]
+        return say_stats(handler_input,test_speach_data.get(first_arg, "placeholder speech"))
+        # if (str(first_arg) == "referee"):
+        #     return ( say_stats(handler_input,"The most used referees are Martin Atkinson with 22 yellow cards and 4 red cards, \
+        #                       Anthony Taylor with 3 yellow cards and 17 red cards", "https://btbscratch.s3.amazonaws.com/FootballCrowdSound.mp3"))
+        # if (str(first_arg) == "touches"):
+        #     return ( say_stats(handler_input,"The players with the most touches were Kane with all of them, Son with some of them, and Vardy with the rest of them ", "https://btbscratch.s3.amazonaws.com/FootballCrowdSound.mp3"))
+        # else:
+        #     speech_text = (f"Thank you, {handler_input.request_envelope.request.arguments[0]}")
  
-        return handler_input.response_builder.speak(speech_text).ask("try again").response
-
+        #return handler_input.response_builder.speak(speech_text).ask("try again").response
+        
 
 
 class HelpIntentHandler(AbstractRequestHandler):
@@ -445,5 +474,3 @@ sb.add_global_response_interceptor(ResponseLogger())
 sb.add_exception_handler(CatchAllExceptionHandler())
 
 handler = sb.lambda_handler()
-
-

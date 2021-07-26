@@ -16,9 +16,10 @@ from ask_sdk_model.interfaces.alexa.presentation.apl import RenderDocumentDirect
 from ask_sdk_model.interfaces.alexa.presentation.apla import RenderDocumentDirective as APLARenderDocumentDirective
 import json
 from random import randrange
-from shared import datasources2, test_speach_data, noise_data
+from shared import datasources2, test_speach_data, noise_data, teamsdatasource
 
 sb = SkillBuilder()
+radioButtonText = "default"
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -50,6 +51,24 @@ def say_stats(handler_input, text_to_speak):
                 ).response)
 
 
+def go_home(handler_input):
+    return (
+        handler_input.response_builder
+            .speak("Welcome to Premier League")
+            .set_should_end_session(False)          
+            .add_directive( 
+              APLRenderDocumentDirective(
+                token= "developer-provided-string",
+                document = {
+                    "type" : "Link",
+                    "token" : "my token",
+                    "src"  : "doc://alexa/apl/documents/GridList"
+                },
+                datasources = datasources2 
+              )
+            ).response
+        )
+    
 
 def load_apl_document(file_path):
     with open(file_path) as f:
@@ -70,6 +89,10 @@ class LaunchRequestHandler(AbstractRequestHandler):
         logger.info("about to return response")
         image_url = "https://duy7y3nglgmh.cloudfront.net/Depositphotos_referee.jpg"
         card = StandardCard(title="Premier League", text="bla", image=Image(small_image_url=image_url, large_image_url=image_url))
+
+        session_attr = handler_input.attributes_manager.session_attributes
+        session_attr["radioButtonText"] = "Form"
+        handler_input.attributes_manager.session_attributes = session_attr
         
         return(
         handler_input.response_builder
@@ -224,7 +247,6 @@ class AudioMixWithDataSourceIntentHandler(AbstractRequestHandler):
 
 
 
-
 class GridMixIntentHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
         return is_intent_name("GridMixIntent")(handler_input)
@@ -247,74 +269,6 @@ class GridMixIntentHandler(AbstractRequestHandler):
                             "src"  : "doc://alexa/apl/documents/GridList"
                         },
                         datasources = datasources2 
-                        #     "gridListData": {
-                        #         "type": "object",
-                        #         "objectId": "gridListSample",
-                        #         "backgroundImage": {
-                        #             "contentDescription": "this is the content",
-                        #             "smallSourceUrl": "https://duy7y3nglgmh.cloudfront.net/football_pitch.png",
-                        #             "largeSourceUrl": "https://duy7y3nglgmh.cloudfront.net/football_pitch.png",
-                        #             "sources": [
-                        #                 {
-                        #                     "url": "https://duy7y3nglgmh.cloudfront.net/football_pitch.png",
-                        #                     "size": "small",
-                        #                     "widthPixels": 0,
-                        #                     "heightPixels": 0
-                        #                 },
-                        #                 {
-                        #                     "url": "https://duy7y3nglgmh.cloudfront.net/football_pitch.png",
-                        #                     "size": "large",
-                        #                     "widthPixels": 0,
-                        #                     "heightPixels": 0
-                        #                 }
-                        #             ]
-                        #         },
-                        #         "title": "You can ask about ....",
-                        #         "listItems": [
-                        #             {
-                        #                 "primaryText": "Tackles",
-                        #                 "imageSource": "https://duy7y3nglgmh.cloudfront.net/tackles.png",
-                        #                 "primaryAction": [{"type": "SendEvent","arguments": ["tackles"]}]
-                        #             },
-                        #             {
-                        #                 "primaryText": "Fouls",
-                        #                 "imageSource": "https://duy7y3nglgmh.cloudfront.net/fouls.png",
-                        #                 "primaryAction": [{"type": "SendEvent","arguments": ["fouls"]}]
-                        #             },
-                        #             {
-                        #                 "primaryText": "Yellow Card",
-                        #                 "imageSource": "https://duy7y3nglgmh.cloudfront.net/yellowcard.png",
-                        #                 "primaryAction": [{"type": "SendEvent","arguments": ["yellowcard"]}]
-                        #             },
-                        #             {
-                        #                 "primaryText": "Red Card",
-                        #                 "imageSource": "https://duy7y3nglgmh.cloudfront.net/redcard.png",
-                        #                 "primaryAction": [{"type": "SendEvent","arguments": ["redcard"]}]
-                        #             },
-                        #             {
-                        #                 "primaryText": "Goals",
-                        #                 "imageSource": "https://duy7y3nglgmh.cloudfront.net/Depositphotos_goal.jpg",
-                        #                 "primaryAction": [{"type": "SendEvent","arguments": ["goals"]}]
-                        #             },
-                        #             {
-                        #                 "primaryText": "Clean Sheets",
-                        #                 "imageSource": "https://duy7y3nglgmh.cloudfront.net/Depositphotos_keeper.jpg",
-                        #                 "primaryAction": [{"type": "SendEvent","arguments": ["cleansheet"]}]
-                        #             },
-                        #             {
-                        #                 "primaryText": "Touches",
-                        #                 "imageSource": "https://duy7y3nglgmh.cloudfront.net/Depositphotos_touches.jpg",
-                        #                 "primaryAction": [{"type": "SendEvent","arguments": ["touches"]}]
-                        #             },
-                        #             {
-                        #                 "primaryText": "Referees",
-                        #                 "imageSource": "https://duy7y3nglgmh.cloudfront.net/Depositphotos_referee.jpg",
-                        #                 "primaryAction": [{"type": "SendEvent","arguments": ["referee"]}]
-                        #             },
-                        #         ],
-                        #         "logoUrl": "https://duy7y3nglgmh.cloudfront.net/redcard.png"
-                        #     }                        
-                        # }              
                       )
                     ).response
                 )
@@ -322,16 +276,8 @@ class GridMixIntentHandler(AbstractRequestHandler):
             return (handler_input.response_builder.speak("no screen for you").set_should_end_session(False).response)      
 
 
-
 class ButtonEventHandler(AbstractRequestHandler):
     def can_handle(self, handler_input):
-        # type: (HandlerInput) -> bool
-        # Since an APL skill might have multiple buttons that generate
-        # UserEvents, use the event source ID to determine the button press
-        # that triggered this event and use the correct handler.
-        # In this example, the string 'fadeHelloTextButton' is the ID we set
-        # on the AlexaButton in the document.
- 
         # The user_event.source is a dict object. We can retrieve the id
         # using the get method on the dictionary.
         logger.info("at ButtonEventHandler")
@@ -347,17 +293,39 @@ class ButtonEventHandler(AbstractRequestHandler):
         logger.info("at ButtonEventHandler.handle " + str(handler_input.request_envelope.request.source))
         logger.info("at ButtonEventHandler.handle " + str(handler_input.request_envelope.request.arguments))
         first_arg = handler_input.request_envelope.request.arguments[0]
-        return say_stats(handler_input,test_speach_data.get(first_arg, "placeholder speech"))
-        # if (str(first_arg) == "referee"):
-        #     return ( say_stats(handler_input,"The most used referees are Martin Atkinson with 22 yellow cards and 4 red cards, \
-        #                       Anthony Taylor with 3 yellow cards and 17 red cards", "https://btbscratch.s3.amazonaws.com/FootballCrowdSound.mp3"))
-        # if (str(first_arg) == "touches"):
-        #     return ( say_stats(handler_input,"The players with the most touches were Kane with all of them, Son with some of them, and Vardy with the rest of them ", "https://btbscratch.s3.amazonaws.com/FootballCrowdSound.mp3"))
-        # else:
-        #     speech_text = (f"Thank you, {handler_input.request_envelope.request.arguments[0]}")
- 
-        #return handler_input.response_builder.speak(speech_text).ask("try again").response
-        
+        if first_arg == 'radio button':
+            #radioButtonText = handler_input.request_envelope.request.arguments[1]
+            logger.info(f"set radioButtonText to {radioButtonText}")
+            session_attr = handler_input.attributes_manager.session_attributes
+            session_attr["radioButtonText"] = handler_input.request_envelope.request.arguments[1]
+            handler_input.attributes_manager.session_attributes = session_attr
+            return
+            
+            
+        if first_arg == "goBack":
+            return(go_home(handler_input))
+            
+        if first_arg == "teams":
+            return (
+                handler_input.response_builder
+                    .speak("Here is the page of just teams")
+                    .set_should_end_session(False)          
+                    .add_directive( 
+                      APLRenderDocumentDirective(
+                        token= "radio button page",
+                        document = {
+                            "type" : "Link",
+                            "token" : "my token",
+                            "src"  : "doc://alexa/apl/documents/RadioButtons"
+                        },
+                        datasources = teamsdatasource 
+                      )
+                    ).response
+                )
+            
+        session_attr = handler_input.attributes_manager.session_attributes
+
+        return say_stats(handler_input,test_speach_data.get(first_arg, first_arg + ", " + session_attr["radioButtonText"]))
 
 
 class HelpIntentHandler(AbstractRequestHandler):

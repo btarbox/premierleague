@@ -1,32 +1,133 @@
 {
     "type": "APL",
-    "version": "1.6",
-    "license": "Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.\nSPDX-License-Identifier: LicenseRef-.amazon.com.-AmznSL-1.0\nLicensed under the Amazon Software License  http://aws.amazon.com/asl/",
-    "theme": "dark",
+    "version": "1.7",
     "import": [
         {
             "name": "alexa-layouts",
-            "version": "1.3.0"
+            "version": "1.4.0"
         }
     ],
+    "layouts": {
+        "RadioButtonRow": {
+            "description": "Display AlexaRadioButton next to a line of text describing the option.",
+            "parameters": [
+                "radioButtonText",
+                "radioButtonId",
+                "checked",
+                "disabled",
+                "primaryAction"
+            ],
+            "items": {
+                "direction": "row",
+                "items": [
+                    {
+                        "type": "AlexaRadioButton",
+                        "id": "${radioButtonId}",
+                        "checked": "${checked}",
+                        "disabled": "${disabled}",
+                        "primaryAction": "${primaryAction}",
+                        "radioButtonHeight": "100%"
+                    },
+                    {
+                        "type": "Text",
+                        "fontSize": "25px",
+                        "text": "${radioButtonText}",
+                        "textAlignVertical": "center"
+                    }
+                ],
+                "type": "Container"
+            }
+        }
+    },
     "mainTemplate": {
         "parameters": [
-            "payload"
+            "gridListData",
+            "radioButtonExampleData"
         ],
         "items": [
             {
-                "type": "AlexaGridList",
-                "id": "plantList",
-                "headerTitle": "${payload.gridListData.title}",
-                "headerBackButton": true,
-                "headerAttributionImage": "${payload.gridListData.logoUrl}",
-                "backgroundImageSource": "${payload.gridListData.backgroundImage.sources[0].url}",
-                "backgroundBlur": false,
-                "backgroundColorOverlay": false,
-                "imageAspectRatio": "standard_landscape",
-                "imageScale": "best-fill",
-                "listItems": "${payload.gridListData.listItems}"
+                "type": "Container",
+                "width": "100%",
+                "height": "100%",
+                "paddingTop": "@spacingMedium",
+                "paddingBottom": "@spacingMedium",
+                "bind": [
+                    {
+                        "name": "CurrentSelectedRadioButtonId",
+                        "value": "${CurrentSelectedRadioButtonId}"
+                    }
+                ],
+                "items": [
+                    {
+                        "type": "Sequence",
+                        "id": "myRadioButtonGroup",
+                        "data": "${radioButtonExampleData.radioButtonGroupItems}",
+                        "shrink": 0,
+                        "item": {
+                            "type": "RadioButtonRow",
+                            "radioButtonId": "${data.radioButtonId}",
+                            "radioButtonText": "${data.radioButtonText}",
+                            "checked": "${data.radioButtonId == CurrentSelectedRadioButtonId}",
+                            "disabled": "${data.disabled}",
+                            "primaryAction": {
+                                "type": "ManageRadioButtonGroupState"
+                            }
+                        }
+                    },
+                    {
+                        "type": "AlexaGridList",
+                        "id": "plantList",
+                        "headerTitle": "${gridListData.title}",
+                        "headerBackButton": true,
+                        "headerAttributionImage": "$gridListData.logoUrl}",
+                        "backgroundImageSource": "${gridListData.backgroundImage.sources[0].url}",
+                        "imageAspectRatio": "standard_landscape",
+                        "imageScale": "best-fill",
+                        "listItems": "${gridListData.listItems}",
+                        "spacing": "0"
+                    }
+                ]
             }
         ]
+    },
+    "commands": {
+        "ManageRadioButtonGroupState": {
+            "command": [
+                {
+                    "when": "${event.source.id != CurrentSelectedRadioButtonId}",
+                    "type": "Sequential",
+                    "description": "User selected a different radio button.",
+                    "commands": [
+                        {
+                            "type": "SetValue",
+                            "description": "Set the checked property for the previously selected item to false.",
+                            "componentId": "${CurrentSelectedRadioButtonId}",
+                            "property": "checked",
+                            "value": false
+                        },
+                        {
+                            "type": "SetValue",
+                            "description": "Save the ID of the new item into a bound variable called CurrentSelectedRadioButtonId.",
+                            "property": "CurrentSelectedRadioButtonId",
+                            "value": "${event.source.id}"
+                        },
+                        {
+                            "type": "SendEvent",
+                            "arguments": [
+                                "radio button",
+                                "${CurrentSelectedRadioButtonId}"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "when": "${event.source.id == CurrentSelectedRadioButtonId}",
+                    "description": "User selected the same option. Override normal AlexaRadioButton behavior and reselect this item.",
+                    "type": "SetValue",
+                    "property": "checked",
+                    "value": true
+                }
+            ]
+        }
     }
 }

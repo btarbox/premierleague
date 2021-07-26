@@ -26,7 +26,7 @@ datasources2 = {
         "listItems": [
             {
                 "primaryText": "The Table",
-                "imageSource": "https://duy7y3nglgmh.cloudfront.net/table.png",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/thetable.png",
                 "primaryAction": [{"type": "SendEvent","arguments": ["table"]}]
             },
             {
@@ -38,6 +38,11 @@ datasources2 = {
                 "primaryText": "Results",
                 "imageSource": "https://duy7y3nglgmh.cloudfront.net/results.png",
                 "primaryAction": [{"type": "SendEvent","arguments": ["results"]}]
+            },
+            {
+                "primaryText": "Teams",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/teams.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["teams"]}]
             },
             {
                 "primaryText": "Relegation",
@@ -84,6 +89,106 @@ datasources2 = {
                 "imageSource": "https://duy7y3nglgmh.cloudfront.net/Depositphotos_referee.jpg",
                 "primaryAction": [{"type": "SendEvent","arguments": ["referee"]}]
             },
+            {
+                "primaryText": "Arsenal",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/Arsenal.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["arsenal"]}]
+            },
+            {
+                "primaryText": "Aston Villa",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/AstonVilla.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["astonvilla"]}]
+            },
+            {
+                "primaryText": "Brentford",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/Brentford.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["brentford"]}]
+            },
+            {
+                "primaryText": "Brighton",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/BrightonAndHoveAlbion.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["brighton"]}]
+            },
+            {
+                "primaryText": "Burnley",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/Burnley.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["burnley"]}]
+            },
+            {
+                "primaryText": "Chelsea",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/Chelsea.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["chelsea"]}]
+            },
+            {
+                "primaryText": "Crystal Palace",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/CrystalPalace.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["crystalpalace"]}]
+            },
+            {
+                "primaryText": "Everton",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/Everton.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["everton"]}]
+            },
+            {
+                "primaryText": "Leeds United",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/LeedsUnited.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["leeds"]}]
+            },
+            {
+                "primaryText": "Leicester City",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/LeicesterCity.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["leicester"]}]
+            },
+            {
+                "primaryText": "Liverpool",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/Liverpool.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["liverpool"]}]
+            },
+            {
+                "primaryText": "Manchester City",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/ManchesterCity.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["manchestercity"]}]
+            },
+            {
+                "primaryText": "Manchester United",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/ManchesterUnited.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["manchesterunited"]}]
+            },
+            {
+                "primaryText": "NewcastleUnited",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/NewcastleUnited.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["newcastle"]}]
+            },
+            {
+                "primaryText": "Norwich City",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/NorwichCity.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["norwichcity"]}]
+            },
+            {
+                "primaryText": "Southampton",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/Southampton.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["southampton"]}]
+            },
+            {
+                "primaryText": "Tottenham Hotspur",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/TottenhamHotspur.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["tottenhamnotspur"]}]
+            },
+            {
+                "primaryText": "Watford",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/Watford.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["watford"]}]
+            },
+            {
+                "primaryText": "Westham United",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/WestHamUnited.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["westhamunited"]}]
+            },
+            {
+                "primaryText": "Wolverhampton Wanderers",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/WolverhamptonWanderers.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["WolverhamptonWanderers"]}]
+            },
         ],
         "logoUrl": "https://duy7y3nglgmh.cloudfront.net/redcard.png"
     }                        
@@ -101,3 +206,159 @@ noise_data = [
     ("https://duy7y3nglgmh.cloudfront.net/SoccerStadiumSoundEffect.mp3", 40 * 1000),
     ("https://duy7y3nglgmh.cloudfront.net/SportsStadiumCrowdCheering", 40 * 1000)
 ]
+
+teamsdatasource = {
+    "radioButtonExampleData": {
+        "defaultSelectedOption": "Form",
+        "radioButtonGroupItems": [
+            {
+                "radioButtonId": "Form",
+                "radioButtonText": "Show team's Form",
+                "radioButtonHeight": "5px"
+            },
+            {
+                "radioButtonId": "Results",
+                "radioButtonText": "Show team's Results",
+                "radioButtonHeight": "5px"
+            },
+            {
+                "radioButtonId": "Fixtures",
+                "radioButtonText": "Show team's Fixtures",
+                "radioButtonHeight": "5px"
+            }
+        ]
+    },
+    "gridListData": {
+        "type": "object",
+        "objectId": "gridListSample",
+        "backgroundImage": {
+            "contentDescription": "this is the content",
+            "smallSourceUrl": "https://duy7y3nglgmh.cloudfront.net/football_pitch.png",
+            "largeSourceUrl": "https://duy7y3nglgmh.cloudfront.net/football_pitch.png",
+            "sources": [
+                {
+                    "url": "https://duy7y3nglgmh.cloudfront.net/football_pitch.png",
+                    "size": "small",
+                    "widthPixels": 0,
+                    "heightPixels": 0
+                },
+                {
+                    "url": "https://duy7y3nglgmh.cloudfront.net/football_pitch.png",
+                    "size": "large",
+                    "widthPixels": 0,
+                    "heightPixels": 0
+                }
+            ]
+        },
+        "title": "You can ask about each team",
+        "listItems": [
+            {
+                "primaryText": "Arsenal",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/Arsenal.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["arsenal", "${CurrentSelectedRadioButtonId}"]}]
+            },
+            {
+                "primaryText": "Aston Villa",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/AstonVilla.png",
+                "primaryAction": [
+                    {
+                        "type": "SendEvent",
+                        "arguments": ["astonvilla"]
+                        
+                    }
+                ]
+            },
+            {
+                "primaryText": "Brentford",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/Brentford.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["brentford", "${CurrentSelectedRadioButtonId}"]}]
+            },
+            {
+                "primaryText": "Brighton",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/BrightonAndHoveAlbion.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["brighton", "${CurrentSelectedRadioButtonId"]}]
+            },
+            {
+                "primaryText": "Burnley",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/Burnley.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["burnley"]}]
+            },
+            {
+                "primaryText": "Chelsea",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/Chelsea.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["chelsea"]}]
+            },
+            {
+                "primaryText": "Crystal Palace",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/CrystalPalace.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["crystalpalace"]}]
+            },
+            {
+                "primaryText": "Everton",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/Everton.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["everton"]}]
+            },
+            {
+                "primaryText": "Leeds United",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/LeedsUnited.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["leeds"]}]
+            },
+            {
+                "primaryText": "Leicester City",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/LeicesterCity.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["leicester"]}]
+            },
+            {
+                "primaryText": "Liverpool",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/Liverpool.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["liverpool"]}]
+            },
+            {
+                "primaryText": "Manchester City",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/ManchesterCity.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["manchestercity"]}]
+            },
+            {
+                "primaryText": "Manchester United",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/ManchesterUnited.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["manchesterunited"]}]
+            },
+            {
+                "primaryText": "NewcastleUnited",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/NewcastleUnited.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["newcastle"]}]
+            },
+            {
+                "primaryText": "Norwich City",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/NorwichCity.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["norwichcity"]}]
+            },
+            {
+                "primaryText": "Southampton",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/Southampton.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["southampton"]}]
+            },
+            {
+                "primaryText": "Tottenham Hotspur",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/TottenhamHotspur.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["tottenhamnotspur"]}]
+            },
+            {
+                "primaryText": "Watford",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/Watford.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["watford"]}]
+            },
+            {
+                "primaryText": "Westham United",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/WestHamUnited.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["westhamunited"]}]
+            },
+            {
+                "primaryText": "Wolverhampton Wanderers",
+                "imageSource": "https://duy7y3nglgmh.cloudfront.net/WolverhamptonWanderers.png",
+                "primaryAction": [{"type": "SendEvent","arguments": ["WolverhamptonWanderers"]}]
+            },
+        ],
+        "logoUrl": "https://duy7y3nglgmh.cloudfront.net/redcard.png"
+    }                        
+}
